@@ -44,20 +44,4 @@ function(cargo_library target_name project_dir)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endfunction()
 
-
-# add_library(web_os SHARED
-#   "web_os.c"
-# )
-
-
-# set_target_properties(web_os PROPERTIES
-#   PUBLIC_HEADER web_os.h
-#   OUTPUT_NAME "web_os"
-# )
-
-# target_compile_definitions(web_os PUBLIC DART_SHARED_LIB)
-
 cargo_library(web_os ${CMAKE_CURRENT_SOURCE_DIR}/../)
-
-
-message(STATUS "STATUS WEB OS LIB" ${web_os})
