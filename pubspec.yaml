@@ -1,4 +1,4 @@
-name: web_os_example
+name: web_os_control
 description: Demonstrates how to use the web_os plugin.
 
 # The following line prevents the package from being accidentally published to
