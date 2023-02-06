@@ -26,44 +26,161 @@ class WebOsBindings {
           lookup)
       : _lookup = lookup;
 
-  /// A very short-lived native function.
-  ///
-  /// For very short-lived functions, it is fine to call them on the main isolate.
-  /// They will block the Dart execution while running the native function, so
-  /// only do this for native functions which are guaranteed to be short-lived.
-  int sum(
-    int a,
-    int b,
+  void debug_mode() {
+    return _debug_mode();
+  }
+
+  late final _debug_modePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('debug_mode');
+  late final _debug_mode = _debug_modePtr.asFunction<void Function()>();
+
+  void connect_to_tv(
+    ffi.Pointer<ffi.Char> address,
+    ffi.Pointer<ffi.Char> key,
   ) {
-    return _sum(
-      a,
-      b,
+    return _connect_to_tv(
+      address,
+      key,
     );
   }
 
-  late final _sumPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>(
-          'sum');
-  late final _sum = _sumPtr.asFunction<int Function(int, int)>();
+  late final _connect_to_tvPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('connect_to_tv');
+  late final _connect_to_tv = _connect_to_tvPtr.asFunction<
+      void Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  /// A longer lived native function, which occupies the thread calling it.
-  ///
-  /// Do not call these kind of native functions in the main isolate. They will
-  /// block Dart execution. This will cause dropped frames in Flutter applications.
-  /// Instead, call these native functions on a separate isolate.
-  int sum_long_running(
-    int a,
-    int b,
+  void increment_volume() {
+    return _increment_volume();
+  }
+
+  late final _increment_volumePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('increment_volume');
+  late final _increment_volume =
+      _increment_volumePtr.asFunction<void Function()>();
+
+  void decrease_volume() {
+    return _decrease_volume();
+  }
+
+  late final _decrease_volumePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('decrease_volume');
+  late final _decrease_volume =
+      _decrease_volumePtr.asFunction<void Function()>();
+
+  void set_mute(
+    int mute,
   ) {
-    return _sum_long_running(
-      a,
-      b,
+    return _set_mute(
+      mute,
     );
   }
 
-  late final _sum_long_runningPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>(
-          'sum_long_running');
-  late final _sum_long_running =
-      _sum_long_runningPtr.asFunction<int Function(int, int)>();
+  late final _set_mutePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('set_mute');
+  late final _set_mute = _set_mutePtr.asFunction<void Function(int)>();
+
+  void pressed_button(
+    int key,
+  ) {
+    return _pressed_button(
+      key,
+    );
+  }
+
+  late final _pressed_buttonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
+          'pressed_button');
+  late final _pressed_button =
+      _pressed_buttonPtr.asFunction<void Function(int)>();
+
+  void pressed_midia_player_button(
+    int key,
+  ) {
+    return _pressed_midia_player_button(
+      key,
+    );
+  }
+
+  late final _pressed_midia_player_buttonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
+          'pressed_midia_player_button');
+  late final _pressed_midia_player_button =
+      _pressed_midia_player_buttonPtr.asFunction<void Function(int)>();
+
+  void launch_app(
+    int app,
+  ) {
+    return _launch_app(
+      app,
+    );
+  }
+
+  late final _launch_appPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>('launch_app');
+  late final _launch_app = _launch_appPtr.asFunction<void Function(int)>();
+
+  void pointer_move_it(
+    double dx,
+    double dy,
+    int drag,
+  ) {
+    return _pointer_move_it(
+      dx,
+      dy,
+      drag,
+    );
+  }
+
+  late final _pointer_move_itPtr = _lookup<
+          ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float, ffi.Int)>>(
+      'pointer_move_it');
+  late final _pointer_move_it =
+      _pointer_move_itPtr.asFunction<void Function(double, double, int)>();
+
+  void pointer_scroll(
+    double dx,
+    double dy,
+  ) {
+    return _pointer_scroll(
+      dx,
+      dy,
+    );
+  }
+
+  late final _pointer_scrollPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
+          'pointer_scroll');
+  late final _pointer_scroll =
+      _pointer_scrollPtr.asFunction<void Function(double, double)>();
+
+  void pointer_click() {
+    return _pointer_click();
+  }
+
+  late final _pointer_clickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('pointer_click');
+  late final _pointer_click = _pointer_clickPtr.asFunction<void Function()>();
+}
+
+abstract class LaunchAppFFI {
+  static const int YouTube = 0;
+  static const int Netflix = 1;
+  static const int AmazonPrimeVideo = 2;
+}
+
+abstract class MidiaPlayerButtonFFI {
+  static const int PLAY = 0;
+  static const int PAUSE = 1;
+}
+
+abstract class MotionButtonKeyFFI {
+  static const int HOME = 0;
+  static const int BACK = 1;
+  static const int UP = 2;
+  static const int DOWN = 3;
+  static const int LEFT = 4;
+  static const int RIGHT = 5;
+  static const int ENTER = 6;
 }

@@ -9,3 +9,13 @@ version = "0.1.0"
 crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
+async-trait = "0.1.63"
+env_logger = "0.10.0"
+
+lg-webos-client = { path = "/home/samuel/Repositories/public/lg-webos-client" }
+log = "0.4.17"
+serde_json = "1.0.91"
+tokio = { version = "1.24.2", features = ["full"] }
+
+[build-dependencies]
+cbindgen = "0.24.3"

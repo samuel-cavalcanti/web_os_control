@@ -7,9 +7,9 @@ description: |
 output: 'lib/web_os_bindings_generated.dart'
 headers:
   entry-points:
-    - 'src/web_os.h'
+    - 'web_os.h'
   include-directives:
-    - 'src/web_os.h'
+    - 'web_os.h'
 preamble: |
   // ignore_for_file: always_specify_types
   // ignore_for_file: camel_case_types
