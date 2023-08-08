@@ -7,7 +7,7 @@ class RoundedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: _roundedBox(Theme.of(context).colorScheme.secondary),
+        decoration: _roundedBox(Theme.of(context).colorScheme.onSurface),
         child: child);
   }
 

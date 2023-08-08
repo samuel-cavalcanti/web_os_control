@@ -34,3 +34,7 @@ build/
 
 /target
 /Cargo.lock
+
+key.json
+last_network_info.json
+test_save_json.json

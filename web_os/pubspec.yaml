@@ -1,10 +1,10 @@
 name: web_os
 description: A new Flutter FFI plugin project.
 version: 0.0.1
-homepage:
+  #homepage:
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.19.0 <3.2.0'
   flutter: ">=2.11.0"
 
 dependencies:
@@ -14,7 +14,6 @@ dependencies:
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
-  ffigen: ^7.2.4
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
@@ -38,9 +37,10 @@ flutter:
   # Please refer to README.md for a detailed explanation.
   plugin:
     platforms:
+      android:
+        ffiPlugin: true
       linux:
         ffiPlugin: true
-
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -13,5 +13,7 @@ void onMove(PointerHoverEvent event) {
 
 void connect() {
   debugPrint("Clicked on connect button");
-  web_os.connectToTV("ws://LGwebOSTV.local:3000/", "");
+  const info = web_os.WebOsNetworkInfo(
+      ip: "192.168.0.199", mac: "04:a2:22:a6:0f:3e", name: "LG Web Os");
+  web_os.connectToTV(info);
 }

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:web_os_control/remote_control_page/remote_control_page.dart';
+
+import 'web_os_control_routers.dart' as web_os_control_routers;
 
 class WebOsRemoteControlApp extends StatelessWidget {
-  WebOsRemoteControlApp({super.key});
+  const WebOsRemoteControlApp({super.key});
   @override
   Widget build(BuildContext context) {
     const m3 = true;
     return MaterialApp(
+      routes: web_os_control_routers.routers,
+      initialRoute: web_os_control_routers.connectToTVPage,
       themeMode: ThemeMode.dark,
-      home: RemoteControlPage(),
       theme: ThemeData(
         useMaterial3: m3,
       ),
-      darkTheme: ThemeData.dark(useMaterial3: m3),
+      darkTheme: ThemeData.dark(useMaterial3: m3).copyWith(),
     );
   }
 }

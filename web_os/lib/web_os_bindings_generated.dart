@@ -35,21 +35,56 @@ class WebOsBindings {
   late final _debug_mode = _debug_modePtr.asFunction<void Function()>();
 
   void connect_to_tv(
-    ffi.Pointer<ffi.Char> address,
-    ffi.Pointer<ffi.Char> key,
+    WebOsNetworkInfoFFI network_info,
+    int isolate_port,
   ) {
     return _connect_to_tv(
-      address,
-      key,
+      network_info,
+      isolate_port,
     );
   }
 
   late final _connect_to_tvPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('connect_to_tv');
-  late final _connect_to_tv = _connect_to_tvPtr.asFunction<
-      void Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+          ffi.Void Function(WebOsNetworkInfoFFI, ffi.Int64)>>('connect_to_tv');
+  late final _connect_to_tv =
+      _connect_to_tvPtr.asFunction<void Function(WebOsNetworkInfoFFI, int)>();
+
+  void turn_on(
+    WebOsNetworkInfoFFI info,
+    int isolate_port,
+  ) {
+    return _turn_on(
+      info,
+      isolate_port,
+    );
+  }
+
+  late final _turn_onPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(WebOsNetworkInfoFFI, ffi.Int64)>>('turn_on');
+  late final _turn_on =
+      _turn_onPtr.asFunction<void Function(WebOsNetworkInfoFFI, int)>();
+
+  void discovery_tv(
+    int isolate_port,
+  ) {
+    return _discovery_tv(
+      isolate_port,
+    );
+  }
+
+  late final _discovery_tvPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>('discovery_tv');
+  late final _discovery_tv = _discovery_tvPtr.asFunction<void Function(int)>();
+
+  void turn_off() {
+    return _turn_off();
+  }
+
+  late final _turn_offPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('turn_off');
+  late final _turn_off = _turn_offPtr.asFunction<void Function()>();
 
   void increment_volume() {
     return _increment_volume();
@@ -81,6 +116,24 @@ class WebOsBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('set_mute');
   late final _set_mute = _set_mutePtr.asFunction<void Function(int)>();
 
+  void increment_channel() {
+    return _increment_channel();
+  }
+
+  late final _increment_channelPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('increment_channel');
+  late final _increment_channel =
+      _increment_channelPtr.asFunction<void Function()>();
+
+  void decrease_channel() {
+    return _decrease_channel();
+  }
+
+  late final _decrease_channelPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('decrease_channel');
+  late final _decrease_channel =
+      _decrease_channelPtr.asFunction<void Function()>();
+
   void pressed_button(
     int key,
   ) {
@@ -95,19 +148,19 @@ class WebOsBindings {
   late final _pressed_button =
       _pressed_buttonPtr.asFunction<void Function(int)>();
 
-  void pressed_midia_player_button(
+  void pressed_media_player_button(
     int key,
   ) {
-    return _pressed_midia_player_button(
+    return _pressed_media_player_button(
       key,
     );
   }
 
-  late final _pressed_midia_player_buttonPtr =
+  late final _pressed_media_player_buttonPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
-          'pressed_midia_player_button');
-  late final _pressed_midia_player_button =
-      _pressed_midia_player_buttonPtr.asFunction<void Function(int)>();
+          'pressed_media_player_button');
+  late final _pressed_media_player_button =
+      _pressed_media_player_buttonPtr.asFunction<void Function(int)>();
 
   void launch_app(
     int app,
@@ -170,7 +223,7 @@ abstract class LaunchAppFFI {
   static const int AmazonPrimeVideo = 2;
 }
 
-abstract class MidiaPlayerButtonFFI {
+abstract class MediaPlayerButtonFFI {
   static const int PLAY = 0;
   static const int PAUSE = 1;
 }
@@ -183,4 +236,14 @@ abstract class MotionButtonKeyFFI {
   static const int LEFT = 4;
   static const int RIGHT = 5;
   static const int ENTER = 6;
+  static const int GUIDE = 7;
+  static const int QMENU = 8;
+}
+
+class WebOsNetworkInfoFFI extends ffi.Struct {
+  external ffi.Pointer<ffi.Char> name;
+
+  external ffi.Pointer<ffi.Char> ip;
+
+  external ffi.Pointer<ffi.Char> mac;
 }

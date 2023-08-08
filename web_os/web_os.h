@@ -9,10 +9,10 @@ typedef enum LaunchAppFFI {
   AmazonPrimeVideo,
 } LaunchAppFFI;
 
-typedef enum MidiaPlayerButtonFFI {
+typedef enum MediaPlayerButtonFFI {
   PLAY,
   PAUSE,
-} MidiaPlayerButtonFFI;
+} MediaPlayerButtonFFI;
 
 typedef enum MotionButtonKeyFFI {
   HOME,
@@ -22,11 +22,25 @@ typedef enum MotionButtonKeyFFI {
   LEFT,
   RIGHT,
   ENTER,
+  GUIDE,
+  QMENU,
 } MotionButtonKeyFFI;
+
+typedef struct WebOsNetworkInfoFFI {
+  const char *name;
+  const char *ip;
+  const char *mac;
+} WebOsNetworkInfoFFI;
 
 void debug_mode(void);
 
-void connect_to_tv(const char *address, const char *key);
+void connect_to_tv(struct WebOsNetworkInfoFFI network_info, int64_t isolate_port);
+
+void turn_on(struct WebOsNetworkInfoFFI info, int64_t isolate_port);
+
+void discovery_tv(int64_t isolate_port);
+
+void turn_off(void);
 
 void increment_volume(void);
 
@@ -34,9 +48,13 @@ void decrease_volume(void);
 
 void set_mute(bool mute);
 
+void increment_channel(void);
+
+void decrease_channel(void);
+
 void pressed_button(enum MotionButtonKeyFFI key);
 
-void pressed_midia_player_button(enum MidiaPlayerButtonFFI key);
+void pressed_media_player_button(enum MediaPlayerButtonFFI key);
 
 void launch_app(enum LaunchAppFFI app);
 

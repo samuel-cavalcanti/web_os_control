@@ -1,0 +1,72 @@
+// The Android Gradle Plugin builds the native code with the Android NDK.
+
+group 'com.example.web_os'
+version '1.0'
+
+
+tasks.whenTaskAdded { task ->
+    if ((task.name == 'javaPreCompileDebug' || task.name == 'javaPreCompileRelease')) {
+        task.dependsOn 'cargoBuild'
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        // The Android Gradle Plugin knows how to build native code with the NDK.
+        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'org.mozilla.rust-android-gradle:plugin:0.9.3'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'org.mozilla.rust-android-gradle.rust-android'
+
+android {
+    // Bumping the plugin compileSdkVersion requires all clients of this plugin
+    // to bump the version in their app.
+    compileSdkVersion 31
+
+    // Bumping the plugin ndkVersion requires all clients of this plugin to bump
+    // the version in their app and to download a newer version of the NDK.
+    ndkVersion "21.4.7075529"
+
+    // Invoke the shared CMake build with the Android Gradle Plugin.
+    externalNativeBuild {
+       cargo {
+                 apiLevels = [
+                    "arm": 16,
+                    "x86": 16,
+                    "x86_64": 21,
+                ]
+                 module  = "../"       // Or whatever directory contains your Cargo.toml
+                 libname = "web_os"          //  Cargo.toml's [package] name.
+                 targets = ['arm','x86', 'x86_64']  
+                 profile = 'release'
+            }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+}
+

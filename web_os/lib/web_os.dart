@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'web_os_bindings_generated.dart';
 
 typedef WebOsLauchApp = LaunchAppFFI;
@@ -20,11 +23,13 @@ typedef WebOSMotionButtonKey = MotionButtonKeyFFI;
 enum MotionKey {
   home(WebOSMotionButtonKey.HOME),
   back(WebOSMotionButtonKey.BACK),
+  enter(WebOSMotionButtonKey.ENTER),
+  guide(WebOSMotionButtonKey.GUIDE),
+  menu(WebOSMotionButtonKey.QMENU),
   up(WebOSMotionButtonKey.UP),
   down(WebOSMotionButtonKey.DOWN),
   left(WebOSMotionButtonKey.LEFT),
-  right(WebOSMotionButtonKey.RIGHT),
-  enter(WebOSMotionButtonKey.ENTER);
+  right(WebOSMotionButtonKey.RIGHT);
 
   const MotionKey(this.code);
   final int code;
@@ -32,7 +37,7 @@ enum MotionKey {
 
 void pressedMotionKey(MotionKey key) => _bindings.pressed_button(key.code);
 
-typedef WebOSMidiaPlayerButtonKey = MidiaPlayerButtonFFI;
+typedef WebOSMidiaPlayerButtonKey = MediaPlayerButtonFFI;
 
 enum MidiaPlayerKey {
   play(WebOSMidiaPlayerButtonKey.PLAY),
@@ -42,8 +47,8 @@ enum MidiaPlayerKey {
   final int code;
 }
 
-void pressedMidiaPlayerKey(MidiaPlayerKey key) =>
-    _bindings.pressed_midia_player_button(key.code);
+void pressedMediaPlayerKey(MidiaPlayerKey key) =>
+    _bindings.pressed_media_player_button(key.code);
 
 /* Volume */
 
@@ -53,17 +58,117 @@ void decreaseVolume() => _bindings.decrease_volume();
 
 void setMute(bool mute) => _bindings.set_mute(mute ? 1 : 0);
 
-void connectToTV(String address, String key) {
-  final addressCstr = address.toNativeUtf8().cast<Char>();
-  final keyCstr = key.toNativeUtf8().cast<Char>();
+void incrementChannel() => _bindings.increment_channel();
 
-  _bindings.connect_to_tv(addressCstr, keyCstr);
+void decreaseChannel() => _bindings.decrease_channel();
 
-  malloc.free(addressCstr);
-  malloc.free(keyCstr);
+class WebOsNetworkInfo {
+  final String ip;
+  final String mac;
+  final String name;
+
+  const WebOsNetworkInfo(
+      {required this.ip, required this.mac, required this.name});
+
+  @override
+  String toString() {
+    return '''WebOsNetworkInfo{
+        name:$name,
+        mac:$mac,
+        ip:$ip,
+    }
+        ''';
+  }
 }
 
-void debugMode() => _bindings.debug_mode();
+WebOsNetworkInfo? CACHE_INFO;
+
+Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsNetworkInfo info) {
+  final infoPointer = malloc.allocate<WebOsNetworkInfoFFI>(1);
+
+  infoPointer.ref.mac = info.mac.toNativeUtf8().cast<Char>();
+  infoPointer.ref.ip = info.ip.toNativeUtf8().cast<Char>();
+  infoPointer.ref.name = info.name.toNativeUtf8().cast<Char>();
+
+  return infoPointer;
+}
+
+void _freeInfoFFI(Pointer<WebOsNetworkInfoFFI> infoPointer) {
+  malloc.free(infoPointer.ref.mac);
+  malloc.free(infoPointer.ref.ip);
+  malloc.free(infoPointer.ref.name);
+  malloc.free(infoPointer);
+}
+
+Future<bool> turnOn(WebOsNetworkInfo info) {
+  final completer = Completer<bool>();
+  final sendPort = _singleMessage(completer);
+
+  final infoPointer = _allocateInfoFFI(info);
+  _bindings.turn_on(infoPointer.ref, sendPort.nativePort);
+  _freeInfoFFI(infoPointer);
+
+  return completer.future;
+}
+
+Future<bool> connectToTV(WebOsNetworkInfo info) {
+  final completer = Completer<bool>();
+  final sendPort = _singleMessage(completer);
+
+  final infoPointer = _allocateInfoFFI(info);
+  _bindings.connect_to_tv(infoPointer.ref, sendPort.nativePort);
+  _freeInfoFFI(infoPointer);
+
+  return completer.future;
+}
+
+typedef CallbackType = Void Function(Pointer<WebOsNetworkInfoFFI>);
+
+class WebOsNetworkInfoError {}
+
+Future<List<WebOsNetworkInfo>> discoveryTv() async {
+  debugPrint("Discovery");
+
+  final completer = Completer<List<dynamic>>();
+
+  final sendPort = _singleMessage(completer);
+  _bindings.discovery_tv(sendPort.nativePort);
+
+  final data = await completer.future;
+  final infos = data
+      .map((info) => WebOsNetworkInfo(ip: info[0], name: info[1], mac: info[2]))
+      .toList(growable: false);
+
+  debugPrint("completed $data");
+
+  return infos;
+}
+
+/// Cria uma porta pelo qual a Main Isolate possa resceber uma mensagem,
+/// ao receber a primeira mensagem,a porta se fecha.
+SendPort _singleMessage<T>(Completer<T> comp) {
+  final recv = ReceivePort();
+
+  onData(data) {
+    recv.close();
+    try {
+      comp.complete(data as T);
+    } catch (error, stack) {
+      comp.completeError(error, stack);
+    }
+  }
+
+  recv.listen(onData);
+
+  return recv.sendPort;
+}
+
+void powerOffTV() => _bindings.turn_off();
+
+void debugMode() {
+  debugPrint('Enable debug');
+  _bindings.debug_mode();
+}
 
 void pointerMoveIt(double dx, double dy, bool drag) =>
     _bindings.pointer_move_it(dx, dy, drag ? 1 : 0);
@@ -75,7 +180,14 @@ void pointerClick() => _bindings.pointer_click();
 const String _libName = 'web_os';
 
 /// The dynamic library in which the symbols for [WebOsBindings] can be found.
-final DynamicLibrary _dylib = () {
+DynamicLibrary openLib() {
+  debugPrint('loading lib: $_libName');
+  final lib = _dylib();
+  debugPrint('loaded lib: $_libName');
+  return lib;
+}
+
+DynamicLibrary _dylib() {
   if (Platform.isMacOS || Platform.isIOS) {
     return DynamicLibrary.open('$_libName.framework/$_libName');
   }
@@ -86,7 +198,30 @@ final DynamicLibrary _dylib = () {
     return DynamicLibrary.open('$_libName.dll');
   }
   throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
-}();
+}
 
 /// The bindings to the native functions in [_dylib].
-final WebOsBindings _bindings = WebOsBindings(_dylib);
+final WebOsBindings _bindings = WebOsBindings(openLib());
+
+/// Binding to `allo-isolate` crate
+void store_dart_post_cobject(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
+) {
+  _store_dart_post_cobject(ptr);
+}
+
+final _store_dart_post_cobject_Dart _store_dart_post_cobject = _dylib()
+    .lookupFunction<_store_dart_post_cobject_C, _store_dart_post_cobject_Dart>(
+        'store_dart_post_cobject');
+
+typedef _store_dart_post_cobject_C = Void Function(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
+);
+typedef _store_dart_post_cobject_Dart = void Function(
+  Pointer<NativeFunction<Int8 Function(Int64, Pointer<Dart_CObject>)>> ptr,
+);
+
+void setup() {
+  // habilita a utilização do allo-isolate
+  store_dart_post_cobject(NativeApi.postCObject);
+}

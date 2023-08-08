@@ -42,3 +42,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# assets
+key.json
+last_network_info.json
+test_save_json.json
