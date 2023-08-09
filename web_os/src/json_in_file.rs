@@ -11,8 +11,16 @@ pub async fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileEr
         }
     };
 
-    match tokio::fs::write(file_name, string_json).await {
-        Ok(_) => log::info!("json saved in file {file_name}"),
+    match tokio::fs::write(file_name, &string_json).await {
+        Ok(_) => {
+            let file = tokio::fs::File::open(file_name)
+                .await
+                .map_err(JsonInFileError::Io)?;
+            tokio::fs::File::sync_all(&file)
+                .await
+                .map_err(JsonInFileError::Io)?;
+            log::info!("json saved in file {file_name},content: {string_json}");
+        }
         Err(e) => {
             log::error!("Unable to save json in file {file_name}, error: {e}");
             return Err(JsonInFileError::Io(e));
@@ -26,11 +34,14 @@ pub async fn load_json(file_name: &str) -> Result<Value, JsonInFileError> {
     let json_string = tokio::fs::read_to_string(file_name)
         .await
         .map_err(JsonInFileError::Io)?;
-    println!("json: {json_string:#?}");
 
-    let json = serde_json::from_str::<Value>(&json_string).map_err(JsonInFileError::Parser)?;
+    let json = serde_json::from_str::<Value>(&json_string).map_err(JsonInFileError::Parser);
 
-    Ok(json)
+    if json.is_err() {
+        log::warn!("unable to convert to json: {json_string:#?} of file: {file_name}");
+    }
+
+    json
 }
 
 #[derive(Debug)]
