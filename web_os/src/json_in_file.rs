@@ -2,7 +2,7 @@ use std::io;
 
 use serde_json::Value;
 
-pub fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileError> {
+pub async fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileError> {
     let string_json = match serde_json::to_string(&json) {
         Ok(string) => string,
         Err(e) => {
@@ -11,7 +11,7 @@ pub fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileError> {
         }
     };
 
-    match std::fs::write(file_name, string_json) {
+    match tokio::fs::write(file_name, string_json).await {
         Ok(_) => log::info!("json saved in file {file_name}"),
         Err(e) => {
             log::error!("Unable to save json in file {file_name}, error: {e}");
@@ -22,8 +22,11 @@ pub fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileError> {
     Ok(())
 }
 
-pub fn load_json(file_name: &str) -> Result<Value, JsonInFileError> {
-    let json_string = std::fs::read_to_string(file_name).map_err(JsonInFileError::Io)?;
+pub async fn load_json(file_name: &str) -> Result<Value, JsonInFileError> {
+    let json_string = tokio::fs::read_to_string(file_name)
+        .await
+        .map_err(JsonInFileError::Io)?;
+    println!("json: {json_string:#?}");
 
     let json = serde_json::from_str::<Value>(&json_string).map_err(JsonInFileError::Parser)?;
 
@@ -42,12 +45,12 @@ mod tests {
 
     use super::{load_json, save_json};
 
-    #[test]
-    fn test_save_and_load_json() {
+    #[tokio::test]
+    async fn test_save_and_load_json() {
         let json = json!({"a":1,"b":2, "test":3});
 
         let file_name = "test_save_json.json";
-        save_json(&json, file_name).unwrap();
+        save_json(&json, file_name).await.unwrap();
 
         let content = std::fs::read_to_string(file_name).unwrap();
 
@@ -56,7 +59,7 @@ mod tests {
 
         assert_eq!(content, expected);
 
-        let json = load_json(file_name).unwrap();
+        let json = load_json(file_name).await.unwrap();
 
         let a = json["a"].as_i64().unwrap();
         let b = json["b"].as_i64().unwrap();

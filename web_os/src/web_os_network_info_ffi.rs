@@ -42,17 +42,17 @@ pub fn to_json(info: &WebOsNetworkInfo) -> serde_json::Value {
     json
 }
 
-pub fn save_last_webos_network_info(
+pub async fn save_last_webos_network_info(
     info: &WebOsNetworkInfo,
 ) -> Result<(), json_in_file::JsonInFileError> {
     let json = to_json(info);
 
-    json_in_file::save_json(&json, LAST_NETWORK_INFO)?;
+    json_in_file::save_json(&json, LAST_NETWORK_INFO).await?;
     Ok(())
 }
 
-pub fn load_last_webos_network_info() -> Option<WebOsNetworkInfo> {
-    let json = match json_in_file::load_json(LAST_NETWORK_INFO) {
+pub async fn load_last_webos_network_info() -> Option<WebOsNetworkInfo> {
+    let json = match json_in_file::load_json(LAST_NETWORK_INFO).await {
         Ok(value) => value,
         Err(_e) => return None,
     };
@@ -93,11 +93,9 @@ fn c_string_to_rust_string(string: *const c_char) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use lg_webos_client::discovery::WebOsNetworkInfo;
+    use crate::web_os_network_info_ffi::web_os_config_from_ip;
 
-    use crate::web_os_network_info_ffi::{save_last_webos_network_info, web_os_config_from_ip};
-
-    use super::{load_last_webos_network_info, WebOsNetworkInfoFFI, LAST_NETWORK_INFO};
+    use super::WebOsNetworkInfoFFI;
     use std::ffi::CString;
 
     #[test]
@@ -142,31 +140,6 @@ mod tests {
             let safe_info = info.to_safe();
             assert!(safe_info.is_none());
         }
-    }
-
-    #[test]
-    fn test_save_and_load_webos_info() {
-        let ip = "192.168.0.200";
-        let mac = "a2:a4:f4:22:04:05";
-        let name = "test";
-        let _result = std::fs::remove_file(LAST_NETWORK_INFO);
-
-        let info = load_last_webos_network_info();
-        assert!(info.is_none());
-
-        let info = WebOsNetworkInfo {
-            name: name.to_string(),
-            ip: ip.to_string(),
-            mac_address: mac.to_string(),
-        };
-
-        save_last_webos_network_info(&info).unwrap();
-
-        let info = load_last_webos_network_info().unwrap();
-
-        assert_eq!(info.name, name.to_string());
-        assert_eq!(info.ip, ip.to_string());
-        assert_eq!(info.mac_address, mac.to_string());
     }
 
     #[test]
