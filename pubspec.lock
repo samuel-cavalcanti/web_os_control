@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
+      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.5"
+    version: "0.4.0"
   clock:
     dependency: transitive
     description:
@@ -85,18 +85,18 @@ packages:
     dependency: transitive
     description:
       name: ffigen
-      sha256: "644232023241486ab39e257677f9a0045a5ae080a144cb5828fe9954565f9c22"
+      sha256: "3a80687577e7e51ba915114742f389a128e8aa241c52ce69a0f70aecb8e14365"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.6"
+    version: "9.0.1"
   file:
     dependency: transitive
     description:
       name: file
-      sha256: "1b92bec4fc2a72f59a8e15af5f52cd441e4a7860b49499d69dfa817af20e925d"
+      sha256: "5fc22d7c25582e38ad9a8515372cd9a93834027aacf1801cf01164dac0ffa08c"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.4"
+    version: "7.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -127,10 +127,10 @@ packages:
     dependency: transitive
     description:
       name: glob
-      sha256: "4515b5b6ddb505ebdd242a5f2cc5d22d3d6a80013789debfbda7777f47ea308c"
+      sha256: "0e7014b3b7d4dac1ca4d6114f82bf1782ee86745b9b42a92c9289c23d8a0ab63"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   js:
     dependency: transitive
     description:
@@ -296,5 +296,5 @@ packages:
     source: hosted
     version: "2.0.3"
 sdks:
-  dart: ">=3.0.0-0 <3.2.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=2.11.0"

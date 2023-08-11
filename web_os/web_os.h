@@ -36,6 +36,8 @@ void debug_mode(void);
 
 void connect_to_tv(struct WebOsNetworkInfoFFI network_info, int64_t isolate_port);
 
+void load_last_tv_info(int64_t isolate_port);
+
 void turn_on(struct WebOsNetworkInfoFFI info, int64_t isolate_port);
 
 void discovery_tv(int64_t isolate_port);

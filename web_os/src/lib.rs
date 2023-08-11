@@ -13,7 +13,6 @@ mod mocks;
 
 use crate::turn_on::WakeUP;
 use allo_isolate::IntoDart;
-use env_logger::Env;
 use lazy_static::lazy_static;
 use lg_webos_client::client::WebOsClient;
 use lg_webos_client::lg_command::request_commands::audio;
@@ -63,17 +62,42 @@ where
 
 #[no_mangle]
 pub extern "C" fn debug_mode() {
-    let env = Env::default().default_filter_or("debug");
+    init_logger();
+}
+#[cfg(target_os = "android")]
+fn init_logger() {
+    android_logger::init_once(
+        android_logger::Config::default().with_max_level(log::LevelFilter::Debug),
+    );
+}
+
+#[cfg(target_os = "linux")]
+fn init_logger() {
+    let env = env_logger::Env::default().default_filter_or("debug");
     let _result = env_logger::Builder::from_env(env).try_init();
 }
 
 #[no_mangle]
 pub extern "C" fn connect_to_tv(network_info: WebOsNetworkInfoFFI, isolate_port: i64) {
-    debug!("connecting to TV");
     let safe_info = network_info.to_safe();
+
+    debug!("connecting to TV, tv: {safe_info:?}");
 
     spawn_isolate_task(isolate_port, async move {
         client_tasks::try_to_connect_task(safe_info, FFI_CLIENT.clone()).await
+    });
+}
+
+#[no_mangle]
+pub extern "C" fn load_last_tv_info(isolate_port: i64) {
+    spawn_isolate_task(isolate_port, async {
+        let info = web_os_network_info_ffi::load_last_webos_network_info().await;
+
+        if let Some(info) = info {
+            Some([info.ip, info.name, info.mac_address].to_vec())
+        } else {
+            None
+        }
     });
 }
 

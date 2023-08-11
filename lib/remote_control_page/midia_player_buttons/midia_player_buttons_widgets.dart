@@ -6,19 +6,22 @@ class MediaPlayerButtons extends StatelessWidget {
   const MediaPlayerButtons({super.key, required this.onPressed});
   final void Function(MediaPlayerKey) onPressed;
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          Expanded(
-            flex: 10,
-            child: playButton(context),
-          ),
-          const Spacer(),
-          Expanded(
-            flex: 10,
-            child: pauseButton(context),
-          ),
-        ],
-      );
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: playButton(context),
+            ),
+            const Spacer(),
+            Expanded(
+              flex: 10,
+              child: pauseButton(context),
+            ),
+          ],
+        ),
+  );
 
   Widget playButton(BuildContext context) => ElevatedButton(
         onPressed: () => onPressed(MediaPlayerKey.play),

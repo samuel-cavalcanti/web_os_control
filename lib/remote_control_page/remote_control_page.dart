@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_os_control/web_os_control_routers.dart' as routers;
 
 import 'motion/motion_control_widget.dart';
 
@@ -52,7 +53,8 @@ class RemoteControlPage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  flex: flex,
+                flex: flex,
+                child: SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -62,7 +64,9 @@ class RemoteControlPage extends StatelessWidget {
                       webos_app_buttons
                           .appButtonsList(web_os_controller.onPressedWebOsApp)
                     ],
-                  )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -93,9 +97,10 @@ Widget volumeChannelPowerScrollButtons(BuildContext context) {
           children: [
             power_widget.PowerButton(onPressed: (bool power) async {
               if (power) {
-                final status = await  web_os_controller.powerOnTV();
+                final status = await web_os_controller.powerOnTV();
                 debugPrint("power status: $status");
               } else {
+                Navigator.of(context).pushNamed(routers.connectToTVPage);
                 web_os_controller.powerOffTV();
               }
             }),

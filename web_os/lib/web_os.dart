@@ -93,22 +93,14 @@ Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsNetworkInfo info) {
   return infoPointer;
 }
 
-void _freeInfoFFI(Pointer<WebOsNetworkInfoFFI> infoPointer) {
-  malloc.free(infoPointer.ref.mac);
-  malloc.free(infoPointer.ref.ip);
-  malloc.free(infoPointer.ref.name);
-  malloc.free(infoPointer);
-}
-
 Future<bool> turnOn(WebOsNetworkInfo info) {
   final completer = Completer<bool>();
   final sendPort = _singleMessage(completer);
 
   final infoPointer = _allocateInfoFFI(info);
   _bindings.turn_on(infoPointer.ref, sendPort.nativePort);
-  _freeInfoFFI(infoPointer);
-
-  return completer.future;
+  final future = completer.future;
+  return future;
 }
 
 Future<bool> connectToTV(WebOsNetworkInfo info) {
@@ -117,9 +109,27 @@ Future<bool> connectToTV(WebOsNetworkInfo info) {
 
   final infoPointer = _allocateInfoFFI(info);
   _bindings.connect_to_tv(infoPointer.ref, sendPort.nativePort);
-  _freeInfoFFI(infoPointer);
+  final future = completer.future;
 
-  return completer.future;
+  return future;
+}
+
+Future<WebOsNetworkInfo?> loadLastTvInfo() {
+  final completer = Completer<List<dynamic>>();
+  final sendPort = _singleMessage(completer);
+  _bindings.load_last_tv_info(sendPort.nativePort);
+
+  future() async {
+    final info = await completer.future;
+
+    if (info.runtimeType == List) {
+      return WebOsNetworkInfo(ip: info[0], name: info[1], mac: info[2]);
+    }
+
+    return null;
+  }
+
+  return future();
 }
 
 typedef CallbackType = Void Function(Pointer<WebOsNetworkInfoFFI>);

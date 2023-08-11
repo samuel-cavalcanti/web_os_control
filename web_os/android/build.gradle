@@ -4,11 +4,18 @@ group 'com.example.web_os'
 version '1.0'
 
 
+def cargoProfile = 'release'
+
 tasks.whenTaskAdded { task ->
     if ((task.name == 'javaPreCompileDebug' || task.name == 'javaPreCompileRelease')) {
+        if (task.name == 'javaPreCompileDebug'){
+            cargoProfile = 'debug'
+        }
         task.dependsOn 'cargoBuild'
     }
 }
+
+
 
 buildscript {
     repositories {
@@ -43,7 +50,7 @@ android {
 
     // Bumping the plugin ndkVersion requires all clients of this plugin to bump
     // the version in their app and to download a newer version of the NDK.
-    ndkVersion "21.4.7075529"
+    ndkVersion "23.1.7779620"
 
     // Invoke the shared CMake build with the Android Gradle Plugin.
     externalNativeBuild {
@@ -52,11 +59,12 @@ android {
                     "arm": 16,
                     "x86": 16,
                     "x86_64": 21,
+                    "arm64": 21,
                 ]
                  module  = "../"       // Or whatever directory contains your Cargo.toml
                  libname = "web_os"          //  Cargo.toml's [package] name.
-                 targets = ['arm','x86', 'x86_64']  
-                 profile = 'release'
+                 targets = ['arm','arm64','x86', 'x86_64']  
+                 profile = cargoProfile 
             }
     }
 

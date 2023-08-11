@@ -24,12 +24,14 @@ Widget _builderIconButton(IconData iconData, void Function() onPressed) =>
 
 Widget _builderIconButtonWithContext(
         IconData iconData, void Function() onPressed, BuildContext context) =>
-    IconButton(
-      onPressed: onPressed,
-      icon: Icon(
-        iconData,
-        color: Theme.of(context).colorScheme.surface,
-        size: 30,
+    ClipOval(
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(
+          iconData,
+          color: Theme.of(context).colorScheme.surface,
+          size: 30,
+        ),
       ),
     );
 
