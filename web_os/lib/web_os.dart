@@ -5,8 +5,11 @@ import 'dart:isolate';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'web_os_bindings_generated.dart';
+import 'web_os_api_bindings.dart';
 
 typedef WebOsLauchApp = LaunchAppFFI;
+typedef WebOSMotionButtonKey = MotionButtonKeyFFI;
+typedef WebOSMidiaPlayerButtonKey = MediaPlayerButtonFFI;
 
 enum WebOsTvApp {
   youTube(WebOsLauchApp.YouTube),
@@ -18,11 +21,9 @@ enum WebOsTvApp {
 }
 
 void pressedWebOsTVApp(WebOsTvApp app) => _bindings.launch_app(app.code);
-typedef WebOSMotionButtonKey = MotionButtonKeyFFI;
 
 enum MotionKey {
-  home(WebOSMotionButtonKey.HOME),
-  back(WebOSMotionButtonKey.BACK),
+  home(WebOSMotionButtonKey.HOME), back(WebOSMotionButtonKey.BACK),
   enter(WebOSMotionButtonKey.ENTER),
   guide(WebOSMotionButtonKey.GUIDE),
   menu(WebOSMotionButtonKey.QMENU),
@@ -37,7 +38,6 @@ enum MotionKey {
 
 void pressedMotionKey(MotionKey key) => _bindings.pressed_button(key.code);
 
-typedef WebOSMidiaPlayerButtonKey = MediaPlayerButtonFFI;
 
 enum MidiaPlayerKey {
   play(WebOSMidiaPlayerButtonKey.PLAY),
@@ -81,8 +81,6 @@ class WebOsNetworkInfo {
   }
 }
 
-WebOsNetworkInfo? CACHE_INFO;
-
 Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsNetworkInfo info) {
   final infoPointer = malloc.allocate<WebOsNetworkInfoFFI>(1);
 
@@ -93,11 +91,18 @@ Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsNetworkInfo info) {
   return infoPointer;
 }
 
+// info -> Pointer<Info>
+// complete + _singleMessagea --> future<boo>
+
+// info --> Future<a> --> Future<b>
+
+
 Future<bool> turnOn(WebOsNetworkInfo info) {
+
+  final infoPointer = _allocateInfoFFI(info);
   final completer = Completer<bool>();
   final sendPort = _singleMessage(completer);
 
-  final infoPointer = _allocateInfoFFI(info);
   _bindings.turn_on(infoPointer.ref, sendPort.nativePort);
   final future = completer.future;
   return future;
@@ -132,9 +137,7 @@ Future<WebOsNetworkInfo?> loadLastTvInfo() {
   return future();
 }
 
-typedef CallbackType = Void Function(Pointer<WebOsNetworkInfoFFI>);
 
-class WebOsNetworkInfoError {}
 
 Future<List<WebOsNetworkInfo>> discoveryTv() async {
   debugPrint("Discovery");
@@ -161,6 +164,7 @@ SendPort _singleMessage<T>(Completer<T> comp) {
 
   onData(data) {
     recv.close();
+    debugPrint("Type of data: ${data.runtimeType}, data $data");
     try {
       comp.complete(data as T);
     } catch (error, stack) {

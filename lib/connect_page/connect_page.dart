@@ -219,10 +219,9 @@ class _ConnectPageState extends State<ConnectPage> {
     final status = await webOsFuture;
 
     if (status) {
-      Future.delayed(const Duration(seconds: 1), () {
-        debugPrint('Nest router');
-        Navigator.of(context).pushNamed(routers.remoteControlPage);
-      });
+      debugPrint('Nest router');
+      Navigator.of(context).popAndPushNamed(routers.remoteControlPage);
+
       return TvState.connected;
     } else {
       return TvState.disconect;

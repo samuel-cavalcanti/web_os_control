@@ -96,13 +96,8 @@ Widget volumeChannelPowerScrollButtons(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             power_widget.PowerButton(onPressed: (bool power) async {
-              if (power) {
-                final status = await web_os_controller.powerOnTV();
-                debugPrint("power status: $status");
-              } else {
-                Navigator.of(context).pushNamed(routers.connectToTVPage);
-                web_os_controller.powerOffTV();
-              }
+              Navigator.of(context).popAndPushNamed(routers.connectToTVPage);
+              web_os_controller.powerOffTV();
             }),
             const volume_widgets.VolumeMute(
               setMute: web_os_controller.setMute,

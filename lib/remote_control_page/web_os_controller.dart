@@ -41,14 +41,6 @@ void pressedChannel(channel_widgets.ChannelKey key) {
 }
 
 void powerOffTV() => web_os.powerOffTV();
-Future<bool> powerOnTV() async {
-  if (web_os.CACHE_INFO != null) {
-    final info = web_os.CACHE_INFO!;
-    debugPrint("turing on the TV: $info");
-    return web_os.turnOn(info);
-  }
-  return false;
-}
 
 void onSpecialButtonPressed(SpecialKey key) {
   switch (key) {
