@@ -58,9 +58,14 @@ void decreaseVolume() => _bindings.decrease_volume();
 
 void setMute(bool mute) => _bindings.set_mute(mute ? 1 : 0);
 
+
+/* Channel */
+
 void incrementChannel() => _bindings.increment_channel();
 
 void decreaseChannel() => _bindings.decrease_channel();
+
+
 
 class WebOsNetworkInfo {
   final String ip;
