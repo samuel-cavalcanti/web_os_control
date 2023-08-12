@@ -4,8 +4,4 @@ abstract interface class WebOsAudioAPI {
   void decreaseVolume();
 
   void setMute(bool mute);
-
-  void incrementChannel();
-
-  void decreaseChannel();
 }
