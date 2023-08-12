@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 
 import 'webos_app_buttons/webos_app_buttons.dart' as webos_app_buttons;
 import 'package:web_os/web_os.dart' as web_os;
@@ -12,19 +12,18 @@ import 'motion/motion_control_widget.dart';
 import 'midia_player_buttons/midia_player_buttons_widgets.dart'
     as midia_player_buttons;
 
-void enableDebug() => web_os.debugMode();
+void enableDebug() => web_os.WEB_OS.system.debug();
+void setMute(bool mute) => web_os.WEB_OS.audio.setMute(mute);
 
-void setMute(bool mute) => web_os.setMute(mute);
-
-void onScroll(double dy) => web_os.pointerScroll(0.0, -dy);
+void onScroll(double dy) => web_os.WEB_OS.pointer.scroll(0.0, -dy);
 
 void volumeOnPressed(volume_widgets.Volume v) {
   switch (v) {
     case volume_widgets.Volume.up:
-      web_os.incrementVolume();
+      web_os.WEB_OS.audio.incrementVolume();
       break;
     case volume_widgets.Volume.down:
-      web_os.decreaseVolume();
+      web_os.WEB_OS.audio.decreaseVolume();
       break;
   }
 }
@@ -32,32 +31,34 @@ void volumeOnPressed(volume_widgets.Volume v) {
 void pressedChannel(channel_widgets.ChannelKey key) {
   switch (key) {
     case channel_widgets.ChannelKey.up:
-      web_os.incrementChannel();
+      web_os.WEB_OS.channel.incrementChannel();
       break;
     case channel_widgets.ChannelKey.down:
-      web_os.decreaseChannel();
+      web_os.WEB_OS.channel.decreaseChannel();
       break;
   }
 }
 
-void powerOffTV() => web_os.powerOffTV();
+void powerOffTV() => web_os.WEB_OS.system.powerOff();
+
+final pressedMotionKey = web_os.WEB_OS.button.pressedMotionKey;
 
 void onSpecialButtonPressed(SpecialKey key) {
   switch (key) {
     case SpecialKey.home:
-      web_os.pressedMotionKey(web_os.MotionKey.home);
+      pressedMotionKey(MotionKey.home);
       break;
     case SpecialKey.back:
-      web_os.pressedMotionKey(web_os.MotionKey.back);
+      pressedMotionKey(MotionKey.back);
       break;
     case SpecialKey.enter:
-      web_os.pressedMotionKey(web_os.MotionKey.enter);
+      pressedMotionKey(MotionKey.enter);
       break;
     case SpecialKey.guide:
-      web_os.pressedMotionKey(web_os.MotionKey.guide);
+      pressedMotionKey(MotionKey.guide);
       break;
     case SpecialKey.settings:
-      web_os.pressedMotionKey(web_os.MotionKey.menu);
+      pressedMotionKey(MotionKey.menu);
       break;
   }
 }
@@ -65,41 +66,43 @@ void onSpecialButtonPressed(SpecialKey key) {
 void onArrowButtonPressed(ArrowKey key) {
   switch (key) {
     case ArrowKey.up:
-      web_os.pressedMotionKey(web_os.MotionKey.up);
+      pressedMotionKey(MotionKey.up);
       break;
     case ArrowKey.down:
-      web_os.pressedMotionKey(web_os.MotionKey.down);
+      pressedMotionKey(MotionKey.down);
       break;
     case ArrowKey.left:
-      web_os.pressedMotionKey(web_os.MotionKey.left);
+      pressedMotionKey(MotionKey.left);
       break;
     case ArrowKey.right:
-      web_os.pressedMotionKey(web_os.MotionKey.right);
+      pressedMotionKey(MotionKey.right);
       break;
   }
 }
 
 void onPressedMediaPlayerButton(midia_player_buttons.MediaPlayerKey key) {
+  final pressedMediaPlayerKey = web_os.WEB_OS.button.pressedMediaPlayerKey;
   switch (key) {
     case midia_player_buttons.MediaPlayerKey.play:
-      web_os.pressedMediaPlayerKey(web_os.MidiaPlayerKey.play);
+      pressedMediaPlayerKey(MidiaPlayerKey.play);
       break;
     case midia_player_buttons.MediaPlayerKey.pause:
-      web_os.pressedMediaPlayerKey(web_os.MidiaPlayerKey.pause);
+      pressedMediaPlayerKey(MidiaPlayerKey.pause);
       break;
   }
 }
 
 void onPressedWebOsApp(webos_app_buttons.AppKey key) {
+  final pressedWebOsTVApp = web_os.WEB_OS.button.pressedWebOsTVApp;
   switch (key) {
     case webos_app_buttons.AppKey.youtube:
-      web_os.pressedWebOsTVApp(web_os.WebOsTvApp.youTube);
+      pressedWebOsTVApp(WebOsTvApp.youTube);
       break;
     case webos_app_buttons.AppKey.netflix:
-      web_os.pressedWebOsTVApp(web_os.WebOsTvApp.netflix);
+      pressedWebOsTVApp(WebOsTvApp.netflix);
       break;
     case webos_app_buttons.AppKey.amazonPrimeVideo:
-      web_os.pressedWebOsTVApp(web_os.WebOsTvApp.amazonPrimeVideo);
+      pressedWebOsTVApp(WebOsTvApp.amazonPrimeVideo);
       break;
   }
 }

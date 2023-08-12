@@ -1,33 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:web_os/web_os_client_api/web_os_network_api.dart';
 import 'tv_item.dart';
-import 'package:web_os_control/web_os_control_routers.dart' as routers;
-
-import 'package:web_os/web_os.dart' as web_os;
+import './connect_page_controller.dart' as controller;
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({super.key});
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
-}
-
-Stream<(List<web_os.WebOsNetworkInfo>, DiscoveryState)> discovery() async* {
-  yield ([], DiscoveryState.searching);
-  var tvs = await web_os.discoveryTv();
-
-  while (tvs.isEmpty) {
-    tvs = await web_os.discoveryTv();
-    await Future.delayed(const Duration(seconds: 1));
-    yield (tvs, DiscoveryState.searching);
-  }
-
-  yield (tvs, DiscoveryState.finished);
-}
-
-enum DiscoveryState {
-  searching,
-  finished;
 }
 
 class _ConnectPageState extends State<ConnectPage> {
@@ -38,6 +19,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final stream = controller.discovery().asBroadcastStream();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -48,13 +30,13 @@ class _ConnectPageState extends State<ConnectPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: StreamBuilder(
-                  stream: discovery(),
+                  stream: stream,
                   builder: (context, snapshot) {
                     debugPrint("snapshot: ${snapshot.data}");
                     if (snapshot.hasData) {
                       final (_, state) = snapshot.data!;
 
-                      return state == DiscoveryState.searching
+                      return state == controller.DiscoveryState.searching
                           ? visibleTvsLoading(context)
                           : visibleTvs(context);
                     } else if (snapshot.hasError) {
@@ -94,12 +76,12 @@ class _ConnectPageState extends State<ConnectPage> {
                         children: [
                           Expanded(
                             child: StreamBuilder(
-                              stream: discovery(),
+                              stream: stream,
                               builder: buildTVList,
                             ),
                           ),
                           FutureBuilder(
-                              future: web_os.loadLastTvInfo(),
+                              future: controller.loadLastTv(),
                               builder: buildLastTV),
                         ],
                       ),
@@ -115,14 +97,14 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   Widget buildLastTV(
-      BuildContext context, AsyncSnapshot<web_os.WebOsNetworkInfo?> snapshot) {
+      BuildContext context, AsyncSnapshot<WebOsNetworkInfo?> snapshot) {
     final tv = snapshot.data;
 
     if (tv != null) {
       return Column(children: [
         const Text('Last TV'),
         TvItemList(
-            connect: () => nextPage(web_os.turnOn(tv)), tvNetworkInfo: tv),
+            connect: () => controller.turnOnTV(tv, context), tvNetworkInfo: tv),
       ]);
     }
 
@@ -133,12 +115,14 @@ class _ConnectPageState extends State<ConnectPage> {
     return Container();
   }
 
-  Widget buildTVList(BuildContext context,
-      AsyncSnapshot<(List<web_os.WebOsNetworkInfo>, DiscoveryState)> snapshot) {
+  Widget buildTVList(
+      BuildContext context,
+      AsyncSnapshot<(List<WebOsNetworkInfo>, controller.DiscoveryState)>
+          snapshot) {
     if (snapshot.hasData) {
       debugPrint('Update view, ${snapshot.data}');
       final (tvs, _) = snapshot.data!;
-      return tvsList(tvs);
+      return tvsList(tvs, context);
     } else if (snapshot.hasError) {
       return errorMessage(snapshot.error!);
     } else {
@@ -167,12 +151,12 @@ class _ConnectPageState extends State<ConnectPage> {
     );
   }
 
-  Widget tvsList(List<web_os.WebOsNetworkInfo> infos) {
+  Widget tvsList(List<WebOsNetworkInfo> infos, BuildContext context) {
     return ListView(
         children: infos
             .map((info) => TvItemList(
                   tvNetworkInfo: info,
-                  connect: () => connect(info),
+                  connect: () => controller.connect(info, context),
                 ))
             .toList(growable: false));
   }
@@ -208,23 +192,5 @@ class _ConnectPageState extends State<ConnectPage> {
     await Future.delayed(const Duration(milliseconds: 500));
     debugPrint('finish refresh');
   }
-
-  Future<TvState> connect(web_os.WebOsNetworkInfo info) {
-    final status = web_os.connectToTV(info);
-
-    return nextPage(status);
-  }
-
-  Future<TvState> nextPage(Future<bool> webOsFuture) async {
-    final status = await webOsFuture;
-
-    if (status) {
-      debugPrint('Nest router');
-      Navigator.of(context).popAndPushNamed(routers.remoteControlPage);
-
-      return TvState.connected;
-    } else {
-      return TvState.disconect;
-    }
-  }
 }
+
