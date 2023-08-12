@@ -60,6 +60,9 @@ class WebOsDynamicLib implements WebOsBindingsAPI {
 
   @override
   void debugMode() => _bindings.debug_mode();
+
+  @override
+  void turnOff() => _bindings.turn_off();
 }
 
 const String _libName = 'web_os';

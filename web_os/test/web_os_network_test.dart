@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:web_os/web_os_bindings_api.dart';
-import 'package:web_os/web_os_client_api/Web_os_network_api.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 import 'package:web_os/web_os_network.dart';
 
 @GenerateNiceMocks([MockSpec<WebOsBindingsAPI>()])

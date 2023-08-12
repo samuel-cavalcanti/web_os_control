@@ -11,8 +11,11 @@ abstract interface class WebOsBindingsAPI {
   /// Look  [MediaPlayerButtonFFI] in [../web_os_bindings_generated.dart]
   void pressedMediaPlayerButton(int code);
 
-  // try to use Wake on Lan to turn on the TV
+  /// try to use Wake on Lan to turn on the TV
   void turnOn(WebOsNetworkInfoFFI info, SendPort port);
+
+  /// Turn of TV
+  void turnOff();
 
   void connectToTV(WebOsNetworkInfoFFI info, SendPort port);
 
