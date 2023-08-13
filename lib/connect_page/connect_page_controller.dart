@@ -17,7 +17,7 @@ Stream<(List<WebOsNetworkInfo>, DiscoveryState)> discovery() async* {
 
   while (tvs.isEmpty) {
     var tvs = await WEB_OS.network.discoveryTv();
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
     yield (tvs, DiscoveryState.searching);
   }
 
@@ -33,7 +33,7 @@ Future<TvState> connect(WebOsNetworkInfo tv, BuildContext context) =>
 Future<TvState> nextPage(Future<bool> webOsFuture, BuildContext context) {
   webOsFuture.then((status) {
     if (status) {
-      Navigator.of(context).popAndPushNamed(routers.remoteControlPage);
+      Navigator.of(context).pushNamed(routers.remoteControlPage);
     }
   });
   return toTvState(webOsFuture);

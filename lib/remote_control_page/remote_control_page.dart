@@ -27,11 +27,6 @@ class RemoteControlPage extends StatelessWidget {
     debugPrint(
         "Size of screen: $size My phone size (360.0, 592.0)"); // My phone size (360.0, 592.0)
     return Scaffold(
-      //bottomNavigationBar: BottomNavigationBar(items: const [
-      //  BottomNavigationBarItem(icon: Icon(Icons.onetwothree), label: ''),
-      //  BottomNavigationBarItem(icon: Icon(Icons.control_camera), label: ''),
-      //  BottomNavigationBarItem(icon: Icon(Icons.gesture), label: ''),
-      //]),
       body: SafeArea(
         child: Center(
           child: Column(

@@ -38,7 +38,7 @@ pub async fn search_tv_task<S: SearchTvs>(
 
 pub async fn wait_until_tv_is_on<S: SearchTvs>(
     tv: &WebOsNetworkInfo,
-    delay_in_sec: u64,
+    delay_in_ms: u64,
     search_method: &mut S,
 ) -> Result<(), String> {
     let find_tv = |infos: &Vec<WebOsNetworkInfo>| {
@@ -59,7 +59,7 @@ pub async fn wait_until_tv_is_on<S: SearchTvs>(
             return Ok(());
         }
 
-        tokio::time::sleep(tokio::time::Duration::new(delay_in_sec, 0)).await;
+        tokio::time::sleep(tokio::time::Duration::from_millis(delay_in_ms)).await;
 
         infos = search_method.search().await?;
     }

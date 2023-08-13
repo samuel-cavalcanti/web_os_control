@@ -105,7 +105,7 @@ pub extern "C" fn load_last_tv_info(isolate_port: i64) {
 pub extern "C" fn turn_on(info: WebOsNetworkInfoFFI, isolate_port: i64) {
     let info = info.to_safe();
     spawn_isolate_task(isolate_port, async move {
-        let delay_in_secods = 1;
+        let delay_in_secods = 500;
         client_tasks::turn_on_task(
             FFI_CLIENT.clone(),
             info,

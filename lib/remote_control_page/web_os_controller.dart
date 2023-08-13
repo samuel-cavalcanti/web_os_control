@@ -12,7 +12,6 @@ import 'motion/motion_control_widget.dart';
 import 'midia_player_buttons/midia_player_buttons_widgets.dart'
     as midia_player_buttons;
 
-void enableDebug() => web_os.WEB_OS.system.debug();
 void setMute(bool mute) => web_os.WEB_OS.audio.setMute(mute);
 
 void onScroll(double dy) => web_os.WEB_OS.pointer.scroll(0.0, -dy);
