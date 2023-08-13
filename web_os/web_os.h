@@ -42,26 +42,26 @@ void turn_on(struct WebOsNetworkInfoFFI info, int64_t isolate_port);
 
 void discovery_tv(int64_t isolate_port);
 
-void turn_off(void);
+void turn_off(int64_t isolate_port);
 
-void increment_volume(void);
+void increment_volume(int64_t isolate_port);
 
-void decrease_volume(void);
+void decrease_volume(int64_t isolate_port);
 
-void set_mute(bool mute);
+void set_mute(bool mute, int64_t isolate_port);
 
-void increment_channel(void);
+void increment_channel(int64_t isolate_port);
 
-void decrease_channel(void);
+void decrease_channel(int64_t isolate_port);
 
-void pressed_button(enum MotionButtonKeyFFI key);
+void pressed_button(enum MotionButtonKeyFFI key, int64_t isolate_port);
 
-void pressed_media_player_button(enum MediaPlayerButtonFFI key);
+void pressed_media_player_button(enum MediaPlayerButtonFFI key, int64_t isolate_port);
 
-void launch_app(enum LaunchAppFFI app);
+void launch_app(enum LaunchAppFFI app, int64_t isolate_port);
 
-void pointer_move_it(float dx, float dy, bool drag);
+void pointer_move_it(float dx, float dy, bool drag, int64_t isolate_port);
 
-void pointer_scroll(float dx, float dy);
+void pointer_scroll(float dx, float dy, int64_t isolate_port);
 
-void pointer_click(void);
+void pointer_click(int64_t isolate_port);

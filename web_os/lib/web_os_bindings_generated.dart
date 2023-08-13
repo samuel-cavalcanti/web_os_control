@@ -93,143 +93,189 @@ class WebOsBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>('discovery_tv');
   late final _discovery_tv = _discovery_tvPtr.asFunction<void Function(int)>();
 
-  void turn_off() {
-    return _turn_off();
+  void turn_off(
+    int isolate_port,
+  ) {
+    return _turn_off(
+      isolate_port,
+    );
   }
 
   late final _turn_offPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('turn_off');
-  late final _turn_off = _turn_offPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>('turn_off');
+  late final _turn_off = _turn_offPtr.asFunction<void Function(int)>();
 
-  void increment_volume() {
-    return _increment_volume();
+  void increment_volume(
+    int isolate_port,
+  ) {
+    return _increment_volume(
+      isolate_port,
+    );
   }
 
   late final _increment_volumePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('increment_volume');
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'increment_volume');
   late final _increment_volume =
-      _increment_volumePtr.asFunction<void Function()>();
+      _increment_volumePtr.asFunction<void Function(int)>();
 
-  void decrease_volume() {
-    return _decrease_volume();
+  void decrease_volume(
+    int isolate_port,
+  ) {
+    return _decrease_volume(
+      isolate_port,
+    );
   }
 
   late final _decrease_volumePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('decrease_volume');
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'decrease_volume');
   late final _decrease_volume =
-      _decrease_volumePtr.asFunction<void Function()>();
+      _decrease_volumePtr.asFunction<void Function(int)>();
 
   void set_mute(
     int mute,
+    int isolate_port,
   ) {
     return _set_mute(
       mute,
+      isolate_port,
     );
   }
 
   late final _set_mutePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('set_mute');
-  late final _set_mute = _set_mutePtr.asFunction<void Function(int)>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int64)>>(
+          'set_mute');
+  late final _set_mute = _set_mutePtr.asFunction<void Function(int, int)>();
 
-  void increment_channel() {
-    return _increment_channel();
+  void increment_channel(
+    int isolate_port,
+  ) {
+    return _increment_channel(
+      isolate_port,
+    );
   }
 
   late final _increment_channelPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('increment_channel');
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'increment_channel');
   late final _increment_channel =
-      _increment_channelPtr.asFunction<void Function()>();
+      _increment_channelPtr.asFunction<void Function(int)>();
 
-  void decrease_channel() {
-    return _decrease_channel();
+  void decrease_channel(
+    int isolate_port,
+  ) {
+    return _decrease_channel(
+      isolate_port,
+    );
   }
 
   late final _decrease_channelPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('decrease_channel');
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'decrease_channel');
   late final _decrease_channel =
-      _decrease_channelPtr.asFunction<void Function()>();
+      _decrease_channelPtr.asFunction<void Function(int)>();
 
   void pressed_button(
     int key,
+    int isolate_port,
   ) {
     return _pressed_button(
       key,
+      isolate_port,
     );
   }
 
   late final _pressed_buttonPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32, ffi.Int64)>>(
           'pressed_button');
   late final _pressed_button =
-      _pressed_buttonPtr.asFunction<void Function(int)>();
+      _pressed_buttonPtr.asFunction<void Function(int, int)>();
 
   void pressed_media_player_button(
     int key,
+    int isolate_port,
   ) {
     return _pressed_media_player_button(
       key,
+      isolate_port,
     );
   }
 
   late final _pressed_media_player_buttonPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32, ffi.Int64)>>(
           'pressed_media_player_button');
   late final _pressed_media_player_button =
-      _pressed_media_player_buttonPtr.asFunction<void Function(int)>();
+      _pressed_media_player_buttonPtr.asFunction<void Function(int, int)>();
 
   void launch_app(
     int app,
+    int isolate_port,
   ) {
     return _launch_app(
       app,
+      isolate_port,
     );
   }
 
   late final _launch_appPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>('launch_app');
-  late final _launch_app = _launch_appPtr.asFunction<void Function(int)>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32, ffi.Int64)>>(
+          'launch_app');
+  late final _launch_app = _launch_appPtr.asFunction<void Function(int, int)>();
 
   void pointer_move_it(
     double dx,
     double dy,
     int drag,
+    int isolate_port,
   ) {
     return _pointer_move_it(
       dx,
       dy,
       drag,
+      isolate_port,
     );
   }
 
   late final _pointer_move_itPtr = _lookup<
-          ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float, ffi.Int)>>(
-      'pointer_move_it');
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Float, ffi.Float, ffi.Int, ffi.Int64)>>('pointer_move_it');
   late final _pointer_move_it =
-      _pointer_move_itPtr.asFunction<void Function(double, double, int)>();
+      _pointer_move_itPtr.asFunction<void Function(double, double, int, int)>();
 
   void pointer_scroll(
     double dx,
     double dy,
+    int isolate_port,
   ) {
     return _pointer_scroll(
       dx,
       dy,
+      isolate_port,
     );
   }
 
-  late final _pointer_scrollPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
-          'pointer_scroll');
+  late final _pointer_scrollPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Float, ffi.Float, ffi.Int64)>>('pointer_scroll');
   late final _pointer_scroll =
-      _pointer_scrollPtr.asFunction<void Function(double, double)>();
+      _pointer_scrollPtr.asFunction<void Function(double, double, int)>();
 
-  void pointer_click() {
-    return _pointer_click();
+  void pointer_click(
+    int isolate_port,
+  ) {
+    return _pointer_click(
+      isolate_port,
+    );
   }
 
   late final _pointer_clickPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('pointer_click');
-  late final _pointer_click = _pointer_clickPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'pointer_click');
+  late final _pointer_click =
+      _pointer_clickPtr.asFunction<void Function(int)>();
 }
 
 abstract class LaunchAppFFI {

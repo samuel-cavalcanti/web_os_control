@@ -136,21 +136,25 @@ async fn load_key_from_file(config: &mut WebOsClientConfig) {
 pub async fn send_lg_command<Cmd: LGCommandRequest + 'static, Client: ClientState>(
     client: Arc<Mutex<Client>>,
     cmd: Cmd,
-) {
+) -> bool {
     let mut client_state = client.lock().await;
     let result = client_state.send_lg_command_to_tv(cmd).await;
 
     log::info!("response: {result:?}");
+
+    result.is_ok()
 }
 
 pub async fn send_pointer_command<Cmd: PointerInputCommand + 'static, Client: ClientState>(
     client: Arc<Mutex<Client>>,
     cmd: Cmd,
-) {
+) -> bool {
     let mut client_state = client.lock().await;
     let result = client_state.send_pointer_input_command_to_tv(cmd).await;
 
     log::info!("response: {result:?}");
+
+    result.is_ok()
 }
 
 #[cfg(test)]
@@ -164,19 +168,14 @@ mod tests {
     use serde_json::json;
     use tokio::sync::Mutex;
 
-    use crate::{
-        client_state::KEY_FILE,
-        json_in_file,
-        mocks::MockWebOsClient,
-    };
     use crate::client_tasks::try_to_connect_task;
+    use crate::{client_state::KEY_FILE, json_in_file, mocks::MockWebOsClient};
     use lg_webos_client::lg_command::pointer_input_commands::Pointer;
     use lg_webos_client::lg_command::request_commands::system_launcher;
 
     use lg_webos_client::lg_command::pointer_input_commands::ButtonKey;
 
     use super::{send_lg_command, send_pointer_command};
-
 
     #[tokio::test]
     async fn test_try_to_connect_task() {
@@ -238,10 +237,11 @@ mod tests {
 
         for cmd in cmds {
             let expected_req = cmd.to_command_request();
-            send_lg_command(client.clone(), cmd).await;
+            let ok = send_lg_command(client.clone(), cmd).await;
             let mock = client.lock().await;
             let req = mock.input_lg.as_ref().unwrap();
             crate::mocks::assert_req(&expected_req, req);
+            assert!(ok);
         }
     }
 
@@ -268,12 +268,13 @@ mod tests {
 
         for cmd in cmds {
             let expected = cmd.to_request_string();
-            send_pointer_command(client.clone(), cmd).await;
+            let ok = send_pointer_command(client.clone(), cmd).await;
 
             let mock = client.lock().await;
             let req = mock.input_pointer.as_ref().unwrap();
 
             assert_eq!(*req, expected);
+            assert!(ok);
         }
     }
 }

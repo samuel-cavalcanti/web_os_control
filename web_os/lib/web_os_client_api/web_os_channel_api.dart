@@ -1,6 +1,5 @@
-
 abstract interface class WebOsChannelAPI {
-  void incrementChannel();
+  Future<bool> incrementChannel();
 
-  void decreaseChannel();
+  Future<bool> decreaseChannel();
 }

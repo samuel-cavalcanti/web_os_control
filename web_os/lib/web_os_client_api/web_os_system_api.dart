@@ -1,5 +1,5 @@
 abstract interface class WebOsSystemAPI {
-  void powerOff();
+  Future<bool> powerOff();
 
   void debug();
 }

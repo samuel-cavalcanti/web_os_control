@@ -13,18 +13,23 @@ class WebOsDynamicLib implements WebOsBindingsAPI {
   }
 
   @override
-  void incrementChannel() => _bindings.increment_channel();
+  void incrementChannel(SendPort port) =>
+      _bindings.increment_channel(port.nativePort);
 
   @override
-  void decreaseChannel() => _bindings.decrease_channel();
+  void decreaseChannel(SendPort port) =>
+      _bindings.decrease_channel(port.nativePort);
 
   @override
-  void incrementVolume() => _bindings.increment_volume();
+  void incrementVolume(SendPort port) =>
+      _bindings.increment_volume(port.nativePort);
   @override
-  void decreaseVolume() => _bindings.decrease_volume();
+  void decreaseVolume(SendPort port) =>
+      _bindings.decrease_volume(port.nativePort);
 
   @override
-  void setMute(int mute) => _bindings.set_mute(mute);
+  void setMute(int mute, SendPort port) =>
+      _bindings.set_mute(mute, port.nativePort);
 
   @override
   void connectToTV(WebOsNetworkInfoFFI info, SendPort port) =>
@@ -42,27 +47,31 @@ class WebOsDynamicLib implements WebOsBindingsAPI {
       _bindings.turn_on(info, port.nativePort);
 
   @override
-  void click() => _bindings.pointer_click();
+  void click(SendPort port) => _bindings.pointer_click(port.nativePort);
   @override
-  void moveIt(double dx, double dy, int drag) =>
-      _bindings.pointer_move_it(dx, dy, drag);
+  void moveIt(double dx, double dy, int drag, SendPort port) =>
+      _bindings.pointer_move_it(dx, dy, drag, port.nativePort);
   @override
-  void scroll(double scrollDx, double scrollDy) =>
-      _bindings.pointer_scroll(scrollDx, scrollDy);
+  void scroll(double scrollDx, double scrollDy, SendPort port) =>
+      _bindings.pointer_scroll(scrollDx, scrollDy, port.nativePort);
 
   @override
-  void launchApp(int code) => _bindings.launch_app(code);
+  void launchApp(int code, SendPort port) =>
+      _bindings.launch_app(code, port.nativePort);
+
   @override
-  void pressedButton(int code) => _bindings.pressed_button(code);
+  void pressedButton(int code, SendPort port) =>
+      _bindings.pressed_button(code, port.nativePort);
+
   @override
-  void pressedMediaPlayerButton(int code) =>
-      _bindings.pressed_media_player_button(code);
+  void pressedMediaPlayerButton(int code, SendPort port) =>
+      _bindings.pressed_media_player_button(code, port.nativePort);
 
   @override
   void debugMode() => _bindings.debug_mode();
 
   @override
-  void turnOff() => _bindings.turn_off();
+  void turnOff(SendPort port) => _bindings.turn_off(port.nativePort);
 }
 
 const String _libName = 'web_os';

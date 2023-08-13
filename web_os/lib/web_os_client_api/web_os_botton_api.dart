@@ -36,12 +36,10 @@ enum MidiaPlayerKey {
   final int code;
 }
 
-
-
 abstract interface class WebOsButtonAPI {
-  void pressedMediaPlayerKey(MidiaPlayerKey key);
+  Future<bool> pressedMediaPlayerKey(MidiaPlayerKey key);
 
-  void pressedMotionKey(MotionKey key);
+  Future<bool> pressedMotionKey(MotionKey key);
 
-  void pressedWebOsTVApp(WebOsTvApp app);
+  Future<bool> pressedWebOsTVApp(WebOsTvApp app);
 }

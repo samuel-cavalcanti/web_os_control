@@ -125,73 +125,105 @@ pub extern "C" fn discovery_tv(isolate_port: i64) {
 }
 
 #[no_mangle]
-pub extern "C" fn turn_off() {
+pub extern "C" fn turn_off(isolate_port: i64) {
     debug!("Sending Turn TV Off with Tokio Runtime ");
-    spawn_future(client_tasks::turn_off_task(FFI_CLIENT.clone()));
+    spawn_isolate_task(
+        isolate_port,
+        client_tasks::turn_off_task(FFI_CLIENT.clone()),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn increment_volume() {
+pub extern "C" fn increment_volume(isolate_port: i64) {
     debug!("Sending increment volume RUST with Tokio Runtime ");
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), audio::VolumeUP));
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), audio::VolumeUP),
+    );
 }
 #[no_mangle]
-pub extern "C" fn decrease_volume() {
+pub extern "C" fn decrease_volume(isolate_port: i64) {
     debug!("Sending decrease volume RUST with Tokio Runtime");
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), audio::VolumeDown));
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), audio::VolumeDown),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn set_mute(mute: bool) {
+pub extern "C" fn set_mute(mute: bool, isolate_port: i64) {
     debug!("Sending volume Mute  with Tokio Runtime ");
 
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), audio::SetMute { mute }));
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), audio::SetMute { mute }),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn increment_channel() {
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), tv::ChannelUp));
+pub extern "C" fn increment_channel(isolate_port: i64) {
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), tv::ChannelUp),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn decrease_channel() {
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), tv::ChannelDown));
+pub extern "C" fn decrease_channel(isolate_port: i64) {
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), tv::ChannelDown),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn pressed_button(key: MotionButtonKeyFFI) {
+pub extern "C" fn pressed_button(key: MotionButtonKeyFFI, isolate_port: i64) {
     debug!("pressed button key: {key:?}");
     let pointer_command = key.to_button_key();
-    spawn_future(send_pointer_command(FFI_CLIENT.clone(), pointer_command));
+    spawn_isolate_task(
+        isolate_port,
+        send_pointer_command(FFI_CLIENT.clone(), pointer_command),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn pressed_media_player_button(key: MediaPlayerButtonFFI) {
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), key.to_command()));
+pub extern "C" fn pressed_media_player_button(key: MediaPlayerButtonFFI, isolate_port: i64) {
+    debug!("pressed media button key: {key:?}");
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), key.to_command()),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn launch_app(app: LaunchAppFFI) {
-    spawn_future(send_lg_command(FFI_CLIENT.clone(), app.to_launch_app()));
+pub extern "C" fn launch_app(app: LaunchAppFFI, isolate_port: i64) {
+    debug!("Launching app key: {app:?}");
+    spawn_isolate_task(
+        isolate_port,
+        send_lg_command(FFI_CLIENT.clone(), app.to_launch_app()),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn pointer_move_it(dx: f32, dy: f32, drag: bool) {
-    spawn_future(send_pointer_command(
-        FFI_CLIENT.clone(),
-        Pointer::move_it(dx, dy, drag),
-    ));
+pub extern "C" fn pointer_move_it(dx: f32, dy: f32, drag: bool, isolate_port: i64) {
+    spawn_isolate_task(
+        isolate_port,
+        send_pointer_command(FFI_CLIENT.clone(), Pointer::move_it(dx, dy, drag)),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn pointer_scroll(dx: f32, dy: f32) {
-    spawn_future(send_pointer_command(
-        FFI_CLIENT.clone(),
-        Pointer::scroll(dx, dy),
-    ));
+pub extern "C" fn pointer_scroll(dx: f32, dy: f32, isolate_port: i64) {
+    spawn_isolate_task(
+        isolate_port,
+        send_pointer_command(FFI_CLIENT.clone(), Pointer::scroll(dx, dy)),
+    );
 }
 
 #[no_mangle]
-pub extern "C" fn pointer_click() {
-    spawn_future(send_pointer_command(FFI_CLIENT.clone(), Pointer::click()));
+pub extern "C" fn pointer_click(isolate_port: i64) {
+    spawn_isolate_task(
+        isolate_port,
+        send_pointer_command(FFI_CLIENT.clone(), Pointer::click()),
+    );
 }

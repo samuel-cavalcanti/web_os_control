@@ -3,19 +3,19 @@ import 'dart:isolate';
 
 abstract interface class WebOsBindingsAPI {
   /// Look [MotionButtonKeyFFI] in [../web_os_bindings_generated.dart]
-  void pressedButton(int code);
+  void pressedButton(int code, SendPort port);
 
   /// Look  [LaunchAppFFI] in [../web_os_bindings_generated.dart]
-  void launchApp(int code);
+  void launchApp(int code, SendPort port);
 
   /// Look  [MediaPlayerButtonFFI] in [../web_os_bindings_generated.dart]
-  void pressedMediaPlayerButton(int code);
+  void pressedMediaPlayerButton(int code, SendPort port);
 
   /// try to use Wake on Lan to turn on the TV
   void turnOn(WebOsNetworkInfoFFI info, SendPort port);
 
   /// Turn of TV
-  void turnOff();
+  void turnOff(SendPort port);
 
   void connectToTV(WebOsNetworkInfoFFI info, SendPort port);
 
@@ -30,21 +30,21 @@ abstract interface class WebOsBindingsAPI {
   void discoveryBySSDP(SendPort port);
 
   // move the Tv red pointer
-  void moveIt(double dx, double dy, int drag);
-  void scroll(double scrollDx, double scrollDy);
-  void click();
+  void moveIt(double dx, double dy, int drag, SendPort port);
+  void scroll(double scrollDx, double scrollDy, SendPort port);
+  void click(SendPort port);
 
   //  volume++
-  void incrementVolume();
+  void incrementVolume(SendPort port);
 
   // volume--
-  void decreaseVolume();
+  void decreaseVolume(SendPort port);
 
-  void setMute(int mute);
+  void setMute(int mute, SendPort port);
 
-  void incrementChannel();
+  void incrementChannel(SendPort port);
 
-  void decreaseChannel();
+  void decreaseChannel(SendPort port);
 
   /// Enable logs
   void debugMode();

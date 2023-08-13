@@ -1,7 +1,7 @@
 abstract interface class WebOsAudioAPI {
-  void incrementVolume();
+  Future<bool> incrementVolume();
 
-  void decreaseVolume();
+  Future<bool> decreaseVolume();
 
-  void setMute(bool mute);
+  Future<bool> setMute(bool mute);
 }

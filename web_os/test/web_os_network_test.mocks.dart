@@ -3,11 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:isolate' as _i4;
+import 'dart:isolate' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:web_os/web_os_bindings_api.dart' as _i2;
-import 'package:web_os/web_os_bindings_generated.dart' as _i3;
+import 'package:web_os/web_os_bindings_generated.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -25,33 +25,54 @@ import 'package:web_os/web_os_bindings_generated.dart' as _i3;
 /// See the documentation for Mockito's code generation for more information.
 class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
   @override
-  void pressedButton(int? code) => super.noSuchMethod(
+  void pressedButton(
+    int? code,
+    _i3.SendPort? port,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
           #pressedButton,
-          [code],
+          [
+            code,
+            port,
+          ],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void launchApp(int? code) => super.noSuchMethod(
+  void launchApp(
+    int? code,
+    _i3.SendPort? port,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
           #launchApp,
-          [code],
+          [
+            code,
+            port,
+          ],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void pressedMediaPlayerButton(int? code) => super.noSuchMethod(
+  void pressedMediaPlayerButton(
+    int? code,
+    _i3.SendPort? port,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
           #pressedMediaPlayerButton,
-          [code],
+          [
+            code,
+            port,
+          ],
         ),
         returnValueForMissingStub: null,
       );
   @override
   void turnOn(
-    _i3.WebOsNetworkInfoFFI? info,
-    _i4.SendPort? port,
+    _i4.WebOsNetworkInfoFFI? info,
+    _i3.SendPort? port,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -64,9 +85,17 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
         returnValueForMissingStub: null,
       );
   @override
+  void turnOff(_i3.SendPort? port) => super.noSuchMethod(
+        Invocation.method(
+          #turnOff,
+          [port],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void connectToTV(
-    _i3.WebOsNetworkInfoFFI? info,
-    _i4.SendPort? port,
+    _i4.WebOsNetworkInfoFFI? info,
+    _i3.SendPort? port,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -79,7 +108,7 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
         returnValueForMissingStub: null,
       );
   @override
-  void loadLastTvInfo(_i4.SendPort? port) => super.noSuchMethod(
+  void loadLastTvInfo(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #loadLastTvInfo,
           [port],
@@ -87,7 +116,7 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
         returnValueForMissingStub: null,
       );
   @override
-  void discoveryBySSDP(_i4.SendPort? port) => super.noSuchMethod(
+  void discoveryBySSDP(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #discoveryBySSDP,
           [port],
@@ -99,6 +128,7 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
     double? dx,
     double? dy,
     int? drag,
+    _i3.SendPort? port,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -107,6 +137,7 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
             dx,
             dy,
             drag,
+            port,
           ],
         ),
         returnValueForMissingStub: null,
@@ -115,6 +146,7 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
   void scroll(
     double? scrollDx,
     double? scrollDy,
+    _i3.SendPort? port,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -122,55 +154,63 @@ class MockWebOsBindingsAPI extends _i1.Mock implements _i2.WebOsBindingsAPI {
           [
             scrollDx,
             scrollDy,
+            port,
           ],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void click() => super.noSuchMethod(
+  void click(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #click,
-          [],
+          [port],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void incrementVolume() => super.noSuchMethod(
+  void incrementVolume(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #incrementVolume,
-          [],
+          [port],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void decreaseVolume() => super.noSuchMethod(
+  void decreaseVolume(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #decreaseVolume,
-          [],
+          [port],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void setMute(int? mute) => super.noSuchMethod(
+  void setMute(
+    int? mute,
+    _i3.SendPort? port,
+  ) =>
+      super.noSuchMethod(
         Invocation.method(
           #setMute,
-          [mute],
+          [
+            mute,
+            port,
+          ],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void incrementChannel() => super.noSuchMethod(
+  void incrementChannel(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #incrementChannel,
-          [],
+          [port],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void decreaseChannel() => super.noSuchMethod(
+  void decreaseChannel(_i3.SendPort? port) => super.noSuchMethod(
         Invocation.method(
           #decreaseChannel,
-          [],
+          [port],
         ),
         returnValueForMissingStub: null,
       );

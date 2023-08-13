@@ -1,27 +1,49 @@
+import 'dart:isolate';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:web_os/web_os_pointer.dart';
 import 'web_os_network_test.mocks.dart';
 
 void main() {
-  test('WebOs pointer', () {
+  test('WebOs pointer', () async {
     final mock = MockWebOsBindingsAPI();
     final pointer = WebOsPointer(mock);
 
-    pointer.moveIt(1.0, 1.0, true);
-    pointer.moveIt(1.0, 2.0, false);
+    var ok = pointer.moveIt(1.0, 1.0, true);
 
-    pointer.scroll(0.0, 2.0);
+    var send =
+        verify(mock.moveIt(1.0, 1.0, 1, captureAny)).captured[0] as SendPort;
 
-    pointer.click();
+    send.send(true);
+    expect(await ok, true);
 
-    verifyInOrder([
-      mock.moveIt(1.0, 1.0, 1),
-      mock.moveIt(1.0, 2.0, 0),
-    ]);
+    ok = pointer.moveIt(1.0, 2.0, false);
 
-    verify(mock.scroll(0.0, 2.0));
+    send = verify(mock.moveIt(1.0, 2.0, 0, captureAny)).captured[0] as SendPort;
 
-    verify(mock.click()).called(1);
+    send.send(true);
+    expect(await ok, true);
+
+    ok = pointer.moveIt(3.0, 4.0, false);
+
+    send = verify(mock.moveIt(3.0, 4.0, 0, captureAny)).captured[0] as SendPort;
+
+    send.send(false);
+    expect(await ok, false);
+
+    ok = pointer.scroll(0.0, 2.0);
+
+    send = verify(mock.scroll(0.0, 2.0, captureAny)).captured[0] as SendPort;
+
+    send.send(true);
+    expect(await ok, true);
+
+    ok = pointer.click();
+
+    send = verify(mock.click(captureAny)).captured[0] as SendPort;
+
+    send.send(true);
+    expect(await ok, true);
   });
 }

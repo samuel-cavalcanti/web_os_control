@@ -9,11 +9,13 @@ use crate::{
     turn_on::TurnOnTV,
 };
 
-pub async fn turn_off_task<Client: ClientState>(client: Arc<Mutex<Client>>) {
+pub async fn turn_off_task<Client: ClientState>(client: Arc<Mutex<Client>>) -> bool {
     let mut client_state = client.lock().await;
 
-    let _result = client_state.send_lg_command_to_tv(system::TurnOffTV).await;
+    let result = client_state.send_lg_command_to_tv(system::TurnOffTV).await;
     client_state.disconnect().await;
+
+    result.is_ok()
 }
 
 pub async fn try_to_connect_task<Client: ClientState>(
@@ -67,7 +69,7 @@ mod test {
     use tokio::sync::Mutex;
 
     use crate::client_tasks::turn_on_task;
-    use crate::mocks::{assert_req, MockSucessSearch, SucessTurnOn, ErrorTurnOn};
+    use crate::mocks::{assert_req, ErrorTurnOn, MockSucessSearch, SucessTurnOn};
     use crate::{client_tasks::turn_off_task, mocks::MockWebOsClient};
 
     #[tokio::test]
@@ -82,12 +84,13 @@ mod test {
         };
         let client = Arc::new(Mutex::new(mock));
 
-        turn_off_task(client.clone()).await;
+        let ok = turn_off_task(client.clone()).await;
 
         let mock = client.lock().await;
         let cmd = mock.input_lg.as_ref().unwrap();
 
         assert!(mock.disconnect);
+        assert!(ok);
 
         let expected_cmd = system::TurnOffTV.to_command_request();
 

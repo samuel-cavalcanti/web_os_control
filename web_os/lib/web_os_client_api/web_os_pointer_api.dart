@@ -1,7 +1,7 @@
 abstract interface class WebOsPointerAPI {
-  void moveIt(double dx, double dy, bool drag);
+  Future<bool> moveIt(double dx, double dy, bool drag);
 
-  void scroll(double dx, double dy);
+  Future<bool> scroll(double dx, double dy);
 
-  void click();
+  Future<bool> click();
 }
