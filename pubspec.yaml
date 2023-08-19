@@ -29,6 +29,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
+  mockito: ^5.4.2
+  build_runner: ^2.4.6
+
   flutter:
     sdk: flutter
 

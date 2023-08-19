@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 
 import 'motion_icon_buttons.dart' as motion_icon_buttons;
 
-enum ArrowKey { up, down, left, right }
-
-enum SpecialKey { home, back, enter, guide, settings }
-
 class ArrowMotion extends StatelessWidget {
-  const ArrowMotion(
-      {super.key,
-      required this.onArrowPressed,
-      required this.onSpecialKeyPressed});
-  final void Function(ArrowKey) onArrowPressed;
-  final void Function(SpecialKey) onSpecialKeyPressed;
+  const ArrowMotion({super.key, required this.onTab});
+  final void Function(MotionKey) onTab;
+
   @override
   Widget build(BuildContext context) => Align(
         alignment: Alignment.center,
@@ -40,7 +34,7 @@ class ArrowMotion extends StatelessWidget {
                             //color: Colors.red,
                           ),
                           child: motion_icon_buttons.buildMoveUp(
-                              context, () => onArrowPressed(ArrowKey.up)),
+                              context, () => onTab(MotionKey.up)),
                         ),
                       ),
                       const Spacer(),
@@ -64,7 +58,7 @@ class ArrowMotion extends StatelessWidget {
                             ),
                           ),
                           child: motion_icon_buttons.buildMoveLeft(
-                              context, () => onArrowPressed(ArrowKey.left)),
+                              context, () => onTab(MotionKey.left)),
                         ),
                       ),
                       Expanded(
@@ -74,8 +68,8 @@ class ArrowMotion extends StatelessWidget {
                           width: double.infinity,
                           decoration: BoxDecoration(
                               border: Border.all(), shape: BoxShape.circle),
-                          child: motion_icon_buttons.buildEnter(context,
-                              () => onSpecialKeyPressed(SpecialKey.enter)),
+                          child: motion_icon_buttons.buildEnter(
+                              context, () => onTab(MotionKey.enter)),
                         ),
                       ),
                       Expanded(
@@ -89,7 +83,7 @@ class ArrowMotion extends StatelessWidget {
                                   bottomRight: Radius.elliptical(150, 400)),
                               shape: BoxShape.rectangle),
                           child: motion_icon_buttons.buildMoveRight(
-                              context, () => onArrowPressed(ArrowKey.right)),
+                              context, () => onTab(MotionKey.right)),
                         ),
                       ),
                     ],
@@ -113,7 +107,7 @@ class ArrowMotion extends StatelessWidget {
                             //color: Colors.green,
                           ),
                           child: motion_icon_buttons.buildMoveDown(
-                              context, () => onArrowPressed(ArrowKey.down)),
+                              context, () => onTab(MotionKey.down)),
                         ),
                       ),
                       const Spacer()
@@ -126,13 +120,9 @@ class ArrowMotion extends StatelessWidget {
 }
 
 class MotionControlButtons extends StatelessWidget {
-  const MotionControlButtons(
-      {super.key,
-      required this.onArrowPressed,
-      required this.onSpecialKeyPressed});
+  const MotionControlButtons({super.key, required this.onTab});
 
-  final void Function(ArrowKey) onArrowPressed;
-  final void Function(SpecialKey) onSpecialKeyPressed;
+  final void Function(MotionKey) onTab;
   @override
   Widget build(BuildContext context) => Container(
         constraints: const BoxConstraints(maxHeight: 400, maxWidth: 400),
@@ -146,10 +136,10 @@ class MotionControlButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   motion_icon_buttons.buildHomeButton(
-                    () => onSpecialKeyPressed(SpecialKey.home),
+                    () => onTab(MotionKey.home),
                   ),
                   motion_icon_buttons.buildBackButton(
-                    () => onSpecialKeyPressed(SpecialKey.back),
+                    () => onTab(MotionKey.back),
                   ),
                 ],
               ),
@@ -157,8 +147,7 @@ class MotionControlButtons extends StatelessWidget {
             Expanded(
                 flex: 3,
                 child: ArrowMotion(
-                  onArrowPressed: onArrowPressed,
-                  onSpecialKeyPressed: onSpecialKeyPressed,
+                  onTab: onTab,
                 )),
             Expanded(
               child: Column(
@@ -166,10 +155,10 @@ class MotionControlButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   motion_icon_buttons.buildSettingsButton(
-                    () => onSpecialKeyPressed(SpecialKey.settings),
+                    () => onTab(MotionKey.menu),
                   ),
                   motion_icon_buttons.buildGuideButton(
-                    () => onSpecialKeyPressed(SpecialKey.guide),
+                    () => onTab(MotionKey.guide),
                   )
                 ],
               ),

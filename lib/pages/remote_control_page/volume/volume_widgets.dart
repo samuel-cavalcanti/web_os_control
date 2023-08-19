@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:web_os_control/controllers/remote_control_page_controller.dart';
 import '../rounded_container.dart';
 
-enum Volume { up, down }
 
 class VolumeMute extends StatefulWidget {
   const VolumeMute({

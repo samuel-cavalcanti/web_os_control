@@ -13,7 +13,7 @@ void main() {
     web_os.setup();
     if (kDebugMode) {
       try {
-          web_os.WEB_OS.system.debug();
+      //    web_os.WEB_OS.system.debug();
       } catch (e) {
         debugPrint('Error e $e');
       }

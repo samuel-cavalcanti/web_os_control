@@ -14,7 +14,7 @@ class WebOsNetwork implements WebOsNetworkAPI {
   WebOsNetwork(this._bindings);
 
   @override
-  Future<bool> connectToTV(WebOsNetworkInfo info) {
+  Future<bool> connectToTV(WebOsTV info) {
     final completer = Completer<bool>();
     final sendPort = utils.singleMessage(completer);
 
@@ -26,7 +26,7 @@ class WebOsNetwork implements WebOsNetworkAPI {
   }
 
   @override
-  Future<List<WebOsNetworkInfo>> discoveryTv() async {
+  Future<List<WebOsTV>> discoveryTv() async {
     debugPrint("Discovery");
 
     final completer = Completer<List<dynamic>>();
@@ -38,7 +38,7 @@ class WebOsNetwork implements WebOsNetworkAPI {
     final data = await completer.future;
     final infos = data
         .map((info) =>
-            WebOsNetworkInfo(ip: info[0], name: info[1], mac: info[2]))
+            WebOsTV(ip: info[0], name: info[1], mac: info[2]))
         .toList(growable: false);
 
     debugPrint("completed $data");
@@ -47,7 +47,7 @@ class WebOsNetwork implements WebOsNetworkAPI {
   }
 
   @override
-  Future<WebOsNetworkInfo?> loadLastTvInfo() {
+  Future<WebOsTV?> loadLastTvInfo() {
     final completer = Completer<List<dynamic>?>();
     final sendPort = utils.singleMessage(completer);
     _bindings.loadLastTvInfo(sendPort);
@@ -56,7 +56,7 @@ class WebOsNetwork implements WebOsNetworkAPI {
       final info = await completer.future;
 
       if (info.runtimeType == List) {
-        return WebOsNetworkInfo(ip: info![0], name: info[1], mac: info[2]);
+        return WebOsTV(ip: info![0], name: info[1], mac: info[2]);
       }
 
       return null;
@@ -66,14 +66,14 @@ class WebOsNetwork implements WebOsNetworkAPI {
   }
 
   @override
-  Future<bool> turnOnTV(WebOsNetworkInfo info) {
+  Future<bool> turnOnTV(WebOsTV info) {
     final infoPointer = _allocateInfoFFI(info);
     final (port, future) = utils.singleBooleanMessage();
     _bindings.turnOn(infoPointer.ref, port);
     return future;
   }
 
-  Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsNetworkInfo info) {
+  Pointer<WebOsNetworkInfoFFI> _allocateInfoFFI(WebOsTV info) {
     final infoPointer = malloc.allocate<WebOsNetworkInfoFFI>(1);
 
     infoPointer.ref.mac = info.mac.toNativeUtf8().cast<Char>();

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
-enum MediaPlayerKey { play, pause }
+import 'package:web_os/web_os_client_api/web_os_botton_api.dart';
 
 class MediaPlayerButtons extends StatelessWidget {
   const MediaPlayerButtons({super.key, required this.onPressed});
-  final void Function(MediaPlayerKey) onPressed;
+  final void Function(MidiaPlayerKey) onPressed;
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Row(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
           children: [
             Expanded(
               flex: 10,
@@ -21,10 +20,10 @@ class MediaPlayerButtons extends StatelessWidget {
             ),
           ],
         ),
-  );
+      );
 
   Widget playButton(BuildContext context) => ElevatedButton(
-        onPressed: () => onPressed(MediaPlayerKey.play),
+        onPressed: () => onPressed(MidiaPlayerKey.play),
         child: Icon(
           Icons.play_arrow,
           color: Theme.of(context).colorScheme.onSurface,
@@ -32,7 +31,7 @@ class MediaPlayerButtons extends StatelessWidget {
       );
 
   Widget pauseButton(BuildContext context) => ElevatedButton(
-        onPressed: () => onPressed(MediaPlayerKey.pause),
+        onPressed: () => onPressed(MidiaPlayerKey.pause),
         child: Icon(
           Icons.pause,
           color: Theme.of(context).colorScheme.onSurface,

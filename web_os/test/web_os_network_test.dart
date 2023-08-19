@@ -15,7 +15,7 @@ void main() {
     final mock = MockWebOsBindingsAPI();
 
     final network = WebOsNetwork(mock);
-    const tv = WebOsNetworkInfo(ip: "192.168.0.1", name: "WEB OS", mac: "123");
+    const tv = WebOsTV(ip: "192.168.0.1", name: "WEB OS", mac: "123");
 
     for (final message in [true, false]) {
       final ok = network.connectToTV(tv);
@@ -34,7 +34,7 @@ void main() {
     final mock = MockWebOsBindingsAPI();
 
     final network = WebOsNetwork(mock);
-    const tv = WebOsNetworkInfo(ip: "192.168.0.1", name: "WEB OS", mac: "123");
+    const tv = WebOsTV(ip: "192.168.0.1", name: "WEB OS", mac: "123");
 
     for (final message in [true, false]) {
       final ok = network.turnOnTV(tv);
@@ -85,7 +85,7 @@ void main() {
 
     final tvArray = <dynamic>["192.168.0.1", "Web os", "123"];
     final expectedTv =
-        WebOsNetworkInfo(ip: tvArray[0], name: tvArray[1], mac: tvArray[2]);
+        WebOsTV(ip: tvArray[0], name: tvArray[1], mac: tvArray[2]);
 
     send.send(tvArray);
 

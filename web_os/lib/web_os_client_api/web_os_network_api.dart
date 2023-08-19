@@ -1,9 +1,9 @@
-class WebOsNetworkInfo {
+class WebOsTV {
   final String ip;
   final String mac;
   final String name;
 
-  const WebOsNetworkInfo(
+  const WebOsTV(
       {required this.ip, required this.mac, required this.name});
 
   @override
@@ -18,8 +18,8 @@ class WebOsNetworkInfo {
 }
 
 abstract interface class WebOsNetworkAPI {
-  Future<List<WebOsNetworkInfo>> discoveryTv();
-  Future<bool> connectToTV(WebOsNetworkInfo info);
-  Future<WebOsNetworkInfo?> loadLastTvInfo();
-  Future<bool> turnOnTV(WebOsNetworkInfo info);
+  Future<List<WebOsTV>> discoveryTv();
+  Future<bool> connectToTV(WebOsTV info);
+  Future<WebOsTV?> loadLastTvInfo();
+  Future<bool> turnOnTV(WebOsTV info);
 }

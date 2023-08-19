@@ -8,7 +8,7 @@ use lg_webos_client::{
     lg_command::{pointer_input_commands::PointerInputCommand, LGCommandRequest},
 };
 use serde_json::{json, Value};
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 use tokio::sync::Mutex;
 
 use crate::{json_in_file, web_os_network_info_ffi};
@@ -38,7 +38,12 @@ where
             ClientStateWebOs::Connected(ref c) => {
                 let mut c = c.lock().await;
 
-                c.send_lg_command_to_tv(cmd).await
+                tokio::time::timeout(
+                    tokio::time::Duration::from_millis(500),
+                    c.send_lg_command_to_tv(cmd),
+                )
+                .await
+                .map_err(|_| WebSocketError::Fatal)?
             }
         }
     }
@@ -58,7 +63,12 @@ where
             ClientStateWebOs::Connected(ref c) => {
                 let mut c = c.lock().await;
 
-                c.send_pointer_input_command_to_tv(cmd).await
+                tokio::time::timeout(
+                    Duration::from_millis(500),
+                    c.send_pointer_input_command_to_tv(cmd),
+                )
+                .await
+                .map_err(|_| WebSocketError::Fatal)?
             }
         }
     }
@@ -67,7 +77,9 @@ where
 #[async_trait]
 impl ClientState for ClientStateWebOs<WebOsClient> {
     async fn connect(&mut self, config: WebOsClientConfig) -> Result<String, WebSocketError> {
-        let client = WebOsClient::connect(config).await?;
+        let client = tokio::time::timeout(Duration::from_secs(1), WebOsClient::connect(config))
+            .await
+            .map_err(|_| WebSocketError::Fatal)??;
 
         let key = client.key.clone();
         *self = ClientStateWebOs::Connected(Arc::new(Mutex::new(client)));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_os_control/controllers/remote_control_page_controller.dart';
 import 'package:web_os_control/web_os_control_routers.dart' as routers;
 
 import 'motion/motion_control_widget.dart';
@@ -15,13 +16,14 @@ import 'webos_app_buttons/webos_app_buttons.dart' as webos_app_buttons;
 
 import 'power/power_button_widget.dart' as power_widget;
 
-import 'web_os_controller.dart' as web_os_controller;
+import 'remote_control_page_controller.dart';
 
 class RemoteControlPage extends StatelessWidget {
   const RemoteControlPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = RemoteControlPageController(Navigator.of(context));
     final size = MediaQuery.of(context).size;
     const flex = 5;
     debugPrint(
@@ -37,14 +39,14 @@ class RemoteControlPage extends StatelessWidget {
               ),
               Expanded(
                 flex: flex,
-                child: volumeChannelPowerScrollButtons(context),
+                child: volumeChannelPowerScrollButtons(context, controller),
               ),
               const Spacer(),
-              const Expanded(
+              Expanded(
                 flex: flex,
                 child: MotionControlButtons(
-                  onArrowPressed: web_os_controller.onArrowButtonPressed,
-                  onSpecialKeyPressed: web_os_controller.onSpecialButtonPressed,
+                  onArrowPressed: controller.onArrowButtonPressed,
+                  onSpecialKeyPressed: controller.onSpecialButtonPressed,
                 ),
               ),
               Expanded(
@@ -53,11 +55,10 @@ class RemoteControlPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const midia_player_buttons.MediaPlayerButtons(
-                          onPressed:
-                              web_os_controller.onPressedMediaPlayerButton),
+                      midia_player_buttons.MediaPlayerButtons(
+                          onPressed: controller.onPressedMediaPlayerButton),
                       webos_app_buttons
-                          .appButtonsList(web_os_controller.onPressedWebOsApp)
+                          .appButtonsList(controller.onPressedWebOsApp)
                     ],
                   ),
                 ),
@@ -70,16 +71,17 @@ class RemoteControlPage extends StatelessWidget {
   }
 }
 
-Widget volumeChannelPowerScrollButtons(BuildContext context) {
+Widget volumeChannelPowerScrollButtons(
+    BuildContext context, RemoteControlPageController controller) {
   const flexButtons = 4;
   const flexSpace = 4;
   return Row(
     children: [
       const Spacer(),
-      const Expanded(
+      Expanded(
         flex: flexButtons,
         child: volume_widgets.VolumeButton(
-          volumeOnPressed: web_os_controller.volumeOnPressed,
+          volumeOnPressed: controller.volumeOnPressed,
         ),
       ),
       const Spacer(
@@ -91,11 +93,10 @@ Widget volumeChannelPowerScrollButtons(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             power_widget.PowerButton(onPressed: (bool power) async {
-              Navigator.of(context).popAndPushNamed(routers.connectToTVPage);
-              web_os_controller.powerOffTV();
+              controller.powerOffTV();
             }),
-            const volume_widgets.VolumeMute(
-              setMute: web_os_controller.setMute,
+            volume_widgets.VolumeMute(
+              setMute: controller.setMute,
             ),
           ],
         ),
@@ -103,15 +104,15 @@ Widget volumeChannelPowerScrollButtons(BuildContext context) {
       const Spacer(
         flex: flexSpace - 2,
       ),
-      const Expanded(
+      Expanded(
         flex: flexButtons,
         child: channel_widgets.ChannelButton(
-          onPressed: web_os_controller.pressedChannel,
+          onPressed: controller.pressedChannel,
         ),
       ),
-      const Expanded(
+      Expanded(
         flex: flexSpace + 2,
-        child: ScrollBar(onMoveY: web_os_controller.onScroll),
+        child: ScrollBar(onMoveY: controller.onScroll),
       ),
     ],
   );

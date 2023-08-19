@@ -21,7 +21,6 @@ use log::debug;
 use media_player_button::MediaPlayerButtonFFI;
 use motion_button::MotionButtonKeyFFI;
 use std::{future::Future, sync::Arc};
-use tokio::runtime::Runtime;
 use tokio::sync::Mutex;
 use web_os_network_info_ffi::WebOsNetworkInfoFFI;
 
@@ -30,7 +29,11 @@ use discovery_tv::SSDPSearch;
 pub use launch_app::LaunchAppFFI;
 
 lazy_static! {
-    static ref RUNTIME: tokio::runtime::Runtime = Runtime::new().unwrap();
+    static ref RUNTIME: tokio::runtime::Runtime = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .worker_threads(1)
+        .build()
+        .unwrap();
     static ref FFI_CLIENT: Arc<Mutex<ClientStateWebOs<WebOsClient>>> =
         Arc::new(Mutex::new(ClientStateWebOs::Disconnected));
 }

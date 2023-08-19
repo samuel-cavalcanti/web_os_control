@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../rounded_container.dart';
 
-enum ChannelKey { up, down }
 
 class ChannelButton extends StatelessWidget {
   const ChannelButton({super.key, required this.onPressed});

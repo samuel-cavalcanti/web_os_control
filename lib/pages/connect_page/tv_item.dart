@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:web_os/web_os_client_api/web_os_network_api.dart';
-
-import './connect_page_controller.dart' as controller;
+import 'package:web_os_control/controllers/web_os_network_controller.dart';
 
 class TvItemList extends StatefulWidget {
-  final WebOsNetworkInfo tvNetworkInfo;
-  final Future<controller.TvState> Function() connect;
+  final WebOsTV tvNetworkInfo;
+  final Future<TvState> Function() connect;
   const TvItemList(
       {super.key, required this.tvNetworkInfo, required this.connect});
 
@@ -14,10 +13,10 @@ class TvItemList extends StatefulWidget {
 }
 
 class TvItemListState extends State<TvItemList> {
-  controller.TvState _state = controller.TvState.disconect;
+  TvState _state = TvState.disconect;
   Future<void> connect() async {
     setState(() {
-      _state = controller.TvState.connecting;
+      _state = TvState.connecting;
     });
     final newState = await widget.connect();
     setState(() {
@@ -57,11 +56,11 @@ class TvItemListState extends State<TvItemList> {
 
   Widget? tvStatus(BuildContext context) {
     switch (_state) {
-      case controller.TvState.connected:
+      case TvState.connected:
         return Text('Connected', style: Theme.of(context).textTheme.bodySmall);
-      case controller.TvState.disconect:
+      case TvState.disconect:
         return null;
-      case controller.TvState.connecting:
+      case TvState.connecting:
         return const CircularProgressIndicator();
     }
   }

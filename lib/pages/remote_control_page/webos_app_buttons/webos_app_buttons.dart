@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 import 'web_os_app_icons.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
 
-enum AppKey { youtube, netflix, amazonPrimeVideo }
 
-Widget appButtonsList(void Function(AppKey) onPressed) => Padding(
+Widget appButtonsList(void Function(WebOsTvApp) onPressed) => Padding(
       padding: const EdgeInsets.all(5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -13,19 +13,19 @@ Widget appButtonsList(void Function(AppKey) onPressed) => Padding(
           Expanded(
               flex: 7,
               child: PrimeVideoButton(
-                onPressed: () => onPressed(AppKey.amazonPrimeVideo),
+                onPressed: () => onPressed(WebOsTvApp.amazonPrimeVideo),
               )),
           const Spacer(),
           Expanded(
               flex: 7,
               child: YoutubeButton(
-                onPressed: () => onPressed(AppKey.youtube),
+                onPressed: () => onPressed(WebOsTvApp.youTube),
               )),
           const Spacer(),
           Expanded(
               flex: 7,
               child: NetflixButton(
-                onPressed: () => onPressed(AppKey.netflix),
+                onPressed: () => onPressed(WebOsTvApp.netflix),
               )),
         ],
       ),

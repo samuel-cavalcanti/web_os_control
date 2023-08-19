@@ -7,7 +7,7 @@ SendPort singleMessage<T>(Completer<T> comp) {
   onData(data) {
     recv.close();
     try {
-      comp.complete(data as T);
+      comp.complete(data);
     } catch (error, stack) {
       comp.completeError(error, stack);
     }
