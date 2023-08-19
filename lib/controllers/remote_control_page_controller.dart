@@ -6,7 +6,6 @@ import 'package:web_os/web_os.dart' as web_os;
 import 'package:web_os_control/web_os_control_routers.dart' as routers;
 
 
-enum ChannelKey { up, down }
 
 class RemoteControlPageController {
   final NavigatorState nav;

@@ -1,4 +1,5 @@
 import 'package:web_os/web_os_client_api/web_os_network_api.dart';
+import 'package:web_os_control/controllers/tv_state.dart';
 import 'package:web_os_control/controllers/web_os_network_controller.dart';
 
 class NetworkController implements WebOsNetworkController {
