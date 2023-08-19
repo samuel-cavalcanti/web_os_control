@@ -9,23 +9,23 @@ class VolumeController implements WebOsVolumeController {
 
   @override
   Future<TvState> setMute(bool mute) async {
-    final status = await _audioAPI.setMute(mute);
+    final status = _audioAPI.setMute(mute);
 
-    return status ? TvState.connected : TvState.disconect;
+    return status.toTVState();
   }
 
   @override
   Future<TvState> setVolume(Volume v) async {
-    final bool status;
+    final Future<bool> status;
     switch (v) {
       case Volume.up:
-        status = await _audioAPI.incrementVolume();
+        status = _audioAPI.incrementVolume();
         break;
       case Volume.down:
-        status = await _audioAPI.decreaseVolume();
+        status = _audioAPI.decreaseVolume();
         break;
     }
 
-    return status ? TvState.connected : TvState.disconect;
+    return status.toTVState();
   }
 }

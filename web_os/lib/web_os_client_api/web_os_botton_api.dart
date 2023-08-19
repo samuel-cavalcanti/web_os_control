@@ -28,16 +28,16 @@ enum MotionKey {
   final int code;
 }
 
-enum MidiaPlayerKey {
+enum MediaPlayerKey {
   play(WebOSMidiaPlayerButtonKey.PLAY),
   pause(WebOSMidiaPlayerButtonKey.PAUSE);
 
-  const MidiaPlayerKey(this.code);
+  const MediaPlayerKey(this.code);
   final int code;
 }
 
 abstract interface class WebOsButtonAPI {
-  Future<bool> pressedMediaPlayerKey(MidiaPlayerKey key);
+  Future<bool> pressedMediaPlayerKey(MediaPlayerKey key);
 
   Future<bool> pressedMotionKey(MotionKey key);
 

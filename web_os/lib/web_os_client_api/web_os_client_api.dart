@@ -1,7 +1,7 @@
 export './web_os_audio_api.dart' show WebOsAudioAPI;
 
 export './web_os_botton_api.dart'
-    show WebOsTvApp, MotionKey, MidiaPlayerKey, WebOsButtonAPI;
+    show WebOsTvApp, MotionKey, MediaPlayerKey, WebOsButtonAPI;
 
 export './web_os_network_api.dart' show WebOsNetworkAPI, WebOsTV;
 

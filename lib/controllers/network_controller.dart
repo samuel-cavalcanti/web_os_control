@@ -40,10 +40,8 @@ class NetworkController implements WebOsNetworkController {
   Future<TvState> _toTvState(Future<bool> webOsFuture) {
     _stopDiscovery = true;
 
-    return webOsFuture
-        .then((status) => status ? TvState.connected : TvState.disconect);
+    return webOsFuture.toTVState();
   }
-
 
   @override
   Future<WebOsTV?> loadLastTv() => networkAPI.loadLastTvInfo();

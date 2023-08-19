@@ -8,7 +8,7 @@ class WebOsButton implements WebOsButtonAPI {
   WebOsButton(this._bindings);
 
   @override
-  Future<bool> pressedMediaPlayerKey(MidiaPlayerKey key) {
+  Future<bool> pressedMediaPlayerKey(MediaPlayerKey key) {
     final (port, future) = utils.singleBooleanMessage();
     _bindings.pressedMediaPlayerButton(key.code, port);
 

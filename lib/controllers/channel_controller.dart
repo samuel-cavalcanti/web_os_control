@@ -9,16 +9,16 @@ class ChannelController implements WebOsChannelController {
 
   @override
   Future<TvState> pressedChannel(ChannelKey key) async {
-    final bool status;
+    final Future<bool> status;
     switch (key) {
       case ChannelKey.up:
-        status = await _channelAPI.incrementChannel();
+        status = _channelAPI.incrementChannel();
         break;
       case ChannelKey.down:
-        status = await _channelAPI.decreaseChannel();
+        status = _channelAPI.decreaseChannel();
         break;
     }
 
-    return status ? TvState.connected : TvState.disconect;
+    return status.toTVState();
   }
 }
