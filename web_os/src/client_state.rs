@@ -144,6 +144,7 @@ async fn load_key_from_file(config: &mut WebOsClientConfig) {
 
 #[cfg(test)]
 const TIMEOUT: Duration = Duration::from_nanos(1);
+
 #[cfg(not(test))]
 const TIMEOUT: Duration = Duration::from_millis(500);
 
@@ -189,9 +190,10 @@ pub async fn send_pointer_command<Cmd: PointerInputCommand + 'static, Client: Cl
     result.is_ok()
 }
 
+
 #[cfg(test)]
 mod tests {
-    use std::{sync::Arc, time::Duration};
+    use std::sync::Arc;
 
     use lg_webos_client::{
         discovery::WebOsNetworkInfo,

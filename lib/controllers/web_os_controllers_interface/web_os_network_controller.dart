@@ -6,11 +6,8 @@ enum DiscoveryState {
   finished;
 }
 
-
 abstract interface class WebOsNetworkController {
   Stream<(List<WebOsTV>, DiscoveryState)> discovery();
-
-  Future<TvState> turnOnTV(WebOsTV tv);
 
   Future<TvState> connect(WebOsTV tv);
 

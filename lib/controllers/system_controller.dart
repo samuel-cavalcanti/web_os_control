@@ -8,5 +8,14 @@ class SystemController implements WebOsSystemController {
   SystemController(this._systemAPI);
 
   @override
-  Future<TvState> turnOff() => _systemAPI.powerOff().toTVState();
+  Future<TvState> turnOff() async {
+    await _systemAPI.powerOff();
+    return TvState.disconect;
+  }
+
+  @override
+  Future<TvState> turnON(WebOsTV tv) async {
+    await _systemAPI.turnOnTV(tv);
+    return TvState.disconect;
+  }
 }

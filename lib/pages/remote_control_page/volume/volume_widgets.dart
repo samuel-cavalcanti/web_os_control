@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_os_control/controllers/remote_control_page_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_volume_controller.dart';
 import '../rounded_container.dart';
 
 

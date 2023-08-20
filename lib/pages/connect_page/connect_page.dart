@@ -1,23 +1,25 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:web_os/web_os_client_api/web_os_network_api.dart';
-import 'package:web_os_control/controllers/web_os_network_controller.dart';
+import 'package:web_os_control/controllers/tv_state.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_network_controller.dart';
 import 'package:web_os_control/pages/connect_page/error_message.dart';
 import 'package:web_os_control/pages/connect_page/tv_list_view.dart';
 import 'package:web_os_control/pages/connect_page/warning_message.dart';
 import 'package:web_os_control/web_os_control_routers.dart' as routers;
+import 'package:web_os_control/controllers/controllers.dart' as controllers;
 import 'connect_page_title.dart';
 import 'tv_item.dart';
 
 class ConnectPage extends StatefulWidget {
-  final WebOsNetworkController controller;
-  const ConnectPage({super.key, required this.controller});
+  const ConnectPage({super.key});
 
   @override
   State<ConnectPage> createState() => _ConnectPageState();
 }
 
 class _ConnectPageState extends State<ConnectPage> {
+  final _networkController = controllers.getController<WebOsNetworkController>();
   @override
   void initState() {
     super.initState();
@@ -25,7 +27,7 @@ class _ConnectPageState extends State<ConnectPage> {
 
   @override
   Widget build(BuildContext context) {
-    final stream = widget.controller.discovery().asBroadcastStream();
+    final stream = _networkController.discovery().asBroadcastStream();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -71,7 +73,7 @@ class _ConnectPageState extends State<ConnectPage> {
                             ),
                           ),
                           FutureBuilder(
-                              future: widget.controller.loadLastTv(),
+                              future: _networkController.loadLastTv(),
                               builder: buildLastTV),
                         ],
                       ),
@@ -94,7 +96,7 @@ class _ConnectPageState extends State<ConnectPage> {
         const Text('Last TV'),
         TvItemList(
             connect: () {
-              final future = widget.controller.turnOnTV(tv);
+              final future = _networkController.turnOnTV(tv);
               future.then(nextPage);
               return future;
             },
@@ -122,7 +124,7 @@ class _ConnectPageState extends State<ConnectPage> {
         return TVListView(
             tvs: tvs,
             onTab: (tv) {
-              final future = widget.controller.connect(tv);
+              final future = _networkController.connect(tv);
               future.then(nextPage);
               return future;
             });

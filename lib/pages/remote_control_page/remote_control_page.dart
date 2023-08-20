@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:web_os_control/controllers/remote_control_page_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_button_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_channel_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_pointer_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_system_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_volume_controller.dart';
 import 'package:web_os_control/web_os_control_routers.dart' as routers;
+
+import 'package:web_os_control/controllers/controllers.dart' as controllers;
 
 import 'motion/motion_control_widget.dart';
 
@@ -16,15 +22,13 @@ import 'webos_app_buttons/webos_app_buttons.dart' as webos_app_buttons;
 
 import 'power/power_button_widget.dart' as power_widget;
 
-import 'remote_control_page_controller.dart';
-
 class RemoteControlPage extends StatelessWidget {
   const RemoteControlPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = RemoteControlPageController(Navigator.of(context));
     final size = MediaQuery.of(context).size;
+    final buttonController = controllers.getController<WebOsButtonController>();
     const flex = 5;
     debugPrint(
         "Size of screen: $size My phone size (360.0, 592.0)"); // My phone size (360.0, 592.0)
@@ -39,14 +43,13 @@ class RemoteControlPage extends StatelessWidget {
               ),
               Expanded(
                 flex: flex,
-                child: volumeChannelPowerScrollButtons(context, controller),
+                child: volumeChannelPowerScrollButtons(context),
               ),
               const Spacer(),
               Expanded(
                 flex: flex,
                 child: MotionControlButtons(
-                  onArrowPressed: controller.onArrowButtonPressed,
-                  onSpecialKeyPressed: controller.onSpecialButtonPressed,
+                  onTab: buttonController.pressMotionKey,
                 ),
               ),
               Expanded(
@@ -56,9 +59,9 @@ class RemoteControlPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       midia_player_buttons.MediaPlayerButtons(
-                          onPressed: controller.onPressedMediaPlayerButton),
+                          onPressed: buttonController.pressMediaPlayerKey),
                       webos_app_buttons
-                          .appButtonsList(controller.onPressedWebOsApp)
+                          .appButtonsList(buttonController.pressWebOsApp)
                     ],
                   ),
                 ),
@@ -71,17 +74,21 @@ class RemoteControlPage extends StatelessWidget {
   }
 }
 
-Widget volumeChannelPowerScrollButtons(
-    BuildContext context, RemoteControlPageController controller) {
+Widget volumeChannelPowerScrollButtons(BuildContext context) {
   const flexButtons = 4;
   const flexSpace = 4;
+
+  final volumeController = controllers.getController<WebOsVolumeController>();
+  final systemController = controllers.getController<WebOsSystemController>();
+  final channelController = controllers.getController<WebOsChannelController>();
+  final pointerControoler = controllers.getController<WebOsPointerController>();
   return Row(
     children: [
       const Spacer(),
       Expanded(
         flex: flexButtons,
         child: volume_widgets.VolumeButton(
-          volumeOnPressed: controller.volumeOnPressed,
+          volumeOnPressed: volumeController.setVolume,
         ),
       ),
       const Spacer(
@@ -93,10 +100,10 @@ Widget volumeChannelPowerScrollButtons(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             power_widget.PowerButton(onPressed: (bool power) async {
-              controller.powerOffTV();
+              systemController.turnOff();
             }),
             volume_widgets.VolumeMute(
-              setMute: controller.setMute,
+              setMute: volumeController.setMute,
             ),
           ],
         ),
@@ -107,12 +114,12 @@ Widget volumeChannelPowerScrollButtons(
       Expanded(
         flex: flexButtons,
         child: channel_widgets.ChannelButton(
-          onPressed: controller.pressedChannel,
+          onPressed: channelController.pressedChannel,
         ),
       ),
       Expanded(
         flex: flexSpace + 2,
-        child: ScrollBar(onMoveY: controller.onScroll),
+        child: ScrollBar(onMoveY: pointerControoler.scroll),
       ),
     ],
   );

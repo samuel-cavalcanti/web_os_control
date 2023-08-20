@@ -30,24 +30,6 @@ void main() {
     }
   });
 
-  test('Test WebOS Turn On TV', () async {
-    final mock = MockWebOsBindingsAPI();
-
-    final network = WebOsNetwork(mock);
-    const tv = WebOsTV(ip: "192.168.0.1", name: "WEB OS", mac: "123");
-
-    for (final message in [true, false]) {
-      final ok = network.turnOnTV(tv);
-
-      final args = verify(mock.turnOn(captureAny, captureAny)).captured;
-
-      final send = args[1] as SendPort;
-
-      send.send(message);
-
-      expect(await ok, message);
-    }
-  });
 
   test('Test WebOS discovery TVs', () async {
     final mock = MockWebOsBindingsAPI();

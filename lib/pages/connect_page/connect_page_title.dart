@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_os_control/controllers/web_os_network_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_network_controller.dart';
 
 class ConnectPageTitle extends StatelessWidget {
   final DiscoveryState state;

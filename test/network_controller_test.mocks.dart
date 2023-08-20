@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:web_os/web_os_client_api/web_os_network_api.dart' as _i2;
+import 'package:web_os/web_os_client_api/web_os_tv.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -24,17 +25,17 @@ import 'package:web_os/web_os_client_api/web_os_network_api.dart' as _i2;
 /// See the documentation for Mockito's code generation for more information.
 class MockWebOsNetworkAPI extends _i1.Mock implements _i2.WebOsNetworkAPI {
   @override
-  _i3.Future<List<_i2.WebOsTV>> discoveryTv() => (super.noSuchMethod(
+  _i3.Future<List<_i4.WebOsTV>> discoveryTv() => (super.noSuchMethod(
         Invocation.method(
           #discoveryTv,
           [],
         ),
-        returnValue: _i3.Future<List<_i2.WebOsTV>>.value(<_i2.WebOsTV>[]),
+        returnValue: _i3.Future<List<_i4.WebOsTV>>.value(<_i4.WebOsTV>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i2.WebOsTV>>.value(<_i2.WebOsTV>[]),
-      ) as _i3.Future<List<_i2.WebOsTV>>);
+            _i3.Future<List<_i4.WebOsTV>>.value(<_i4.WebOsTV>[]),
+      ) as _i3.Future<List<_i4.WebOsTV>>);
   @override
-  _i3.Future<bool> connectToTV(_i2.WebOsTV? info) => (super.noSuchMethod(
+  _i3.Future<bool> connectToTV(_i4.WebOsTV? info) => (super.noSuchMethod(
         Invocation.method(
           #connectToTV,
           [info],
@@ -43,21 +44,12 @@ class MockWebOsNetworkAPI extends _i1.Mock implements _i2.WebOsNetworkAPI {
         returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
   @override
-  _i3.Future<_i2.WebOsTV?> loadLastTvInfo() => (super.noSuchMethod(
+  _i3.Future<_i4.WebOsTV?> loadLastTvInfo() => (super.noSuchMethod(
         Invocation.method(
           #loadLastTvInfo,
           [],
         ),
-        returnValue: _i3.Future<_i2.WebOsTV?>.value(),
-        returnValueForMissingStub: _i3.Future<_i2.WebOsTV?>.value(),
-      ) as _i3.Future<_i2.WebOsTV?>);
-  @override
-  _i3.Future<bool> turnOnTV(_i2.WebOsTV? info) => (super.noSuchMethod(
-        Invocation.method(
-          #turnOnTV,
-          [info],
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-        returnValueForMissingStub: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i3.Future<_i4.WebOsTV?>.value(),
+        returnValueForMissingStub: _i3.Future<_i4.WebOsTV?>.value(),
+      ) as _i3.Future<_i4.WebOsTV?>);
 }

@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:web_os/web_os_client_api/web_os_system_api.dart' as _i2;
+import 'package:web_os/web_os_client_api/web_os_tv.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -28,6 +29,15 @@ class MockWebOsSystemAPI extends _i1.Mock implements _i2.WebOsSystemAPI {
         Invocation.method(
           #powerOff,
           [],
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
+  @override
+  _i3.Future<bool> turnOnTV(_i4.WebOsTV? info) => (super.noSuchMethod(
+        Invocation.method(
+          #turnOnTV,
+          [info],
         ),
         returnValue: _i3.Future<bool>.value(false),
         returnValueForMissingStub: _i3.Future<bool>.value(false),

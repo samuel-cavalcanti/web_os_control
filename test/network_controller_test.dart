@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:web_os/web_os_client_api/web_os_network_api.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:web_os_control/controllers/network_controller.dart';
@@ -74,50 +74,6 @@ void main() {
     expect(await tv, null);
   });
 
-  test('Turn On TV', () async {
-    final mock = MockWebOsNetworkAPI();
-    final controller =
-        NetworkController(networkAPI: mock, discoveryDelay: Duration.zero);
-
-    when(mock.turnOnTV(TV)).thenAnswer((_) async {
-      return true;
-    });
-
-    when(mock.discoveryTv()).thenAnswer((_) => Future.microtask(() => []));
-
-    final List<(List<WebOsTV>, DiscoveryState)> results = [];
-    TvState status = TvState.disconect;
-    var i = 0;
-    await for (final result in controller.discovery()) {
-      results.add(result);
-      if (i == 1) {
-        status = await controller.turnOnTV(TV);
-      }
-      i++;
-    }
-    final expects = [
-      (<WebOsTV>[], DiscoveryState.searching),
-      (<WebOsTV>[], DiscoveryState.searching),
-      (<WebOsTV>[], DiscoveryState.finished),
-    ];
-
-    expectSearch(results, expects,
-        reason:
-            "The Turn on or connect command should stop the discovery search");
-
-    expect(status, TvState.connected,
-        reason: "when the NetworkAPI resturn true, means that tv is connect");
-
-    when(mock.turnOnTV(TV)).thenAnswer((_) async {
-      return false;
-    });
-
-    status = await controller.turnOnTV(TV);
-
-    expect(status, TvState.disconect,
-        reason:
-            "when the NetworkAPI resturn false, means that tv is disconect");
-  });
 
   test('Test connect TV', () async {
     final mock = MockWebOsNetworkAPI();
