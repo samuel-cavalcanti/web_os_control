@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:web_os_control/controllers/network_controller.dart';
 import 'package:web_os_control/controllers/tv_state.dart';
-import 'package:web_os_control/controllers/web_os_network_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_network_controller.dart';
 
 @GenerateNiceMocks([MockSpec<WebOsNetworkAPI>()])
 import 'network_controller_test.mocks.dart';

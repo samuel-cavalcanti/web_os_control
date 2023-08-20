@@ -4,7 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:web_os/web_os_client_api/web_os_channel_api.dart';
 import 'package:web_os_control/controllers/channel_controller.dart';
 import 'package:web_os_control/controllers/tv_state.dart';
-import 'package:web_os_control/controllers/web_os_channel_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_channel_controller.dart';
 
 @GenerateNiceMocks([MockSpec<WebOsChannelAPI>()])
 import 'channel_controller_test.mocks.dart';
@@ -31,7 +31,6 @@ void main() {
 
     expect(status, TvState.disconect);
 
-
     when(mock.incrementChannel()).thenAnswer((_) async {
       return true;
     });
@@ -39,8 +38,6 @@ void main() {
     status = await controller.pressedChannel(ChannelKey.up);
 
     expect(status, TvState.connected);
-
-
 
     when(mock.incrementChannel()).thenAnswer((_) async {
       return false;

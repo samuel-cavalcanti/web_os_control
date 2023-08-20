@@ -1,6 +1,6 @@
 import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 import 'package:web_os_control/controllers/tv_state.dart';
-import 'package:web_os_control/controllers/web_os_pointer_controller.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_pointer_controller.dart';
 
 class PointerController implements WebOsPointerController {
   final WebOsPointerAPI _api;
