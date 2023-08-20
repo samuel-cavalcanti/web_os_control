@@ -39,10 +39,5 @@ class RemoteControlPageController {
   }
 
 
-  void onScroll(double dy) => _pressTask(
-        () => web_os.WEB_OS.pointer.scroll(0.0, -dy),
-      );
-
-
 
 }
