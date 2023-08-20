@@ -5,7 +5,6 @@ use tokio::sync::Mutex;
 
 use crate::{
     client_state::{self, ClientState},
-    discovery_tv::{wait_until_tv_is_on, SearchTvs},
     turn_on::TurnOnTV,
 };
 
@@ -32,12 +31,9 @@ pub async fn try_to_connect_task<Client: ClientState>(
     client_state::try_to_connect(client, &info).await
 }
 
-pub async fn turn_on_task<Client: ClientState, S: SearchTvs, T: TurnOnTV>(
-    client: Arc<Mutex<Client>>,
+pub async fn turn_on_task<T: TurnOnTV>(
     info: Option<WebOsNetworkInfo>,
     turn_on_method: &mut T,
-    search_method: &mut S,
-    delay_in_secods: u64,
 ) -> bool {
     let info = match info {
         Some(info) => info,
@@ -52,12 +48,7 @@ pub async fn turn_on_task<Client: ClientState, S: SearchTvs, T: TurnOnTV>(
         return false;
     }
 
-    if let Err(e) = wait_until_tv_is_on(&info, delay_in_secods, search_method).await {
-        log::error!("{e}");
-        return false;
-    }
-
-    client_state::try_to_connect(client, &info).await
+    true
 }
 
 #[cfg(test)]
@@ -69,7 +60,7 @@ mod test {
     use tokio::sync::Mutex;
 
     use crate::client_tasks::turn_on_task;
-    use crate::mocks::{assert_req, ErrorTurnOn, MockSucessSearch, SucessTurnOn};
+    use crate::mocks::{assert_req, ErrorTurnOn, SucessTurnOn};
     use crate::{client_tasks::turn_off_task, mocks::MockWebOsClient};
 
     #[tokio::test]
@@ -99,69 +90,26 @@ mod test {
 
     #[tokio::test]
     async fn test_turn_on() {
-        let mock = MockWebOsClient {
-            result_connect: Ok("1123".to_owned()),
-            result_input: Ok(()),
-            result_lg: Ok(json!({"test":"ok"})),
-            input_lg: None,
-            input_pointer: None,
-            disconnect: false,
-        };
-
-        let client = Arc::new(Mutex::new(mock));
-
         let info = WebOsNetworkInfo {
             ip: "192.168.0.199".into(),
             name: "WebOS/1.5 UPnP/1.0 webOSTV/1.0".into(),
             mac_address: "03:a1:11:a6:0f:3e".into(),
         };
 
-        let mut search = MockSucessSearch {
-            infos: vec![info.clone()],
-        };
         let mut turn_on = SucessTurnOn;
 
-        let result = turn_on_task(
-            client.clone(),
-            Some(info.clone()),
-            &mut turn_on,
-            &mut search,
-            0,
-        )
-        .await;
+        let result = turn_on_task(Some(info.clone()), &mut turn_on).await;
 
         assert!(result);
 
         // Error when WebOsNetworkInfoFFI can't be converted
-        let result = turn_on_task(client.clone(), None, &mut turn_on, &mut search, 0).await;
+        let result = turn_on_task(None, &mut turn_on).await;
 
         assert!(!result);
 
         // Error when  can't send the wake up command
         let mut turn_on = ErrorTurnOn;
-        let result = turn_on_task(
-            client.clone(),
-            Some(info.clone()),
-            &mut turn_on,
-            &mut search,
-            0,
-        )
-        .await;
-
-        assert!(!result);
-
-        // Error when the tv can't be found
-        let mut search = MockSucessSearch { infos: vec![] };
-        let mut turn_on = SucessTurnOn;
-
-        let result = turn_on_task(
-            client.clone(),
-            Some(info.clone()),
-            &mut turn_on,
-            &mut search,
-            0,
-        )
-        .await;
+        let result = turn_on_task(Some(info.clone()), &mut turn_on).await;
 
         assert!(!result);
     }

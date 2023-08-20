@@ -1,10 +1,12 @@
 mod mock_search_tvs;
 mod mock_turn_on;
 mod mock_webos_client;
+mod mock_webos_inf_loop;
 
 pub use mock_search_tvs::{MockErrorSearch, MockSucessSearch};
 pub use mock_turn_on::{ErrorTurnOn, SucessTurnOn};
 pub use mock_webos_client::MockWebOsClient;
+pub use mock_webos_inf_loop::MockWebOsClientInfLoop;
 
 use lg_webos_client::lg_command::CommandRequest;
 pub fn assert_req(cmd: &CommandRequest, expected_cmd: &CommandRequest) {
