@@ -1,9 +1,12 @@
 # WEB OS Remote Controller
 
-![](./docs/assets/connect page.png) ![](./docs/assets/remote control page.png)
-
 Controle remoto para TVs que utilizam o sistema [WebOS](https://webostv.developer.lge.com/).
-Essa aplicação foi feita Utilizando Flutter-dart e Tokio-rust, suportando Linux e Android.
+Essa aplicação foi feita Utilizando Flutter-dart e Tokio-rust, suportando Linux e Android. Basicamente essa aplicação é uma interface gráfica para
+minha biblioteca https://github.com/samuel-cavalcanti/lg-webos-client, ao mesmo tempo que verifico como seria desenvolver uma aplicação utilizando
+o framework Flutter com rust.
+
+![](/docs/assets/connect%20page.png)  ![](/docs/assets/remote%20control%20page.png)
+
 
 ## Get Started
 
@@ -34,6 +37,12 @@ Executando testes do código em rust
 ```bash
 cd ./web_os
 cargo t
+```
+
+## Executando aplicativo localmente
+
+```bash
+flutter run -d linux
 ```
 
 ## Comandos úteis
