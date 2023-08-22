@@ -23,7 +23,7 @@ rustup target add x86_64-linux-android      # for x86_64
 rustup target add x86_64-unknown-linux-gnu  # for linux-x86-64
 ```
 
-Instale a versão correta do **NDK** localizada no arquivo [build.gradle](./web_os/android/build.gradle). Essa aplicação utiliza o plugin da mozila [rust-android-gradle](https://github.com/mozilla/rust-android-gradle).
+Instale a versão correta do **NDK** localizada no arquivo [build.gradle](./web_os/android/build.gradle). Essa aplicação utiliza o plugin da mozilla [rust-android-gradle](https://github.com/mozilla/rust-android-gradle).
 
 
 ## Executando testes
