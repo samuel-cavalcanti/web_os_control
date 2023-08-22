@@ -99,8 +99,9 @@ Widget volumeChannelPowerScrollButtons(BuildContext context) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            power_widget.PowerButton(onPressed: (bool power) async {
+            power_widget.PowerButton(onPressed: (bool power) {
               systemController.turnOff();
+              Navigator.of(context).popAndPushNamed(routers.connectToTVPage);
             }),
             volume_widgets.VolumeMute(
               setMute: volumeController.setMute,

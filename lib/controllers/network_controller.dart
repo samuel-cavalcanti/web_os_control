@@ -8,7 +8,7 @@ class NetworkController implements WebOsNetworkController {
   NetworkController(
       {required this.networkAPI,
       this.maxDiscoveryTries = 5,
-      this.discoveryDelay = const Duration(milliseconds: 500)});
+      this.discoveryDelay = const Duration(seconds: 1, milliseconds: 500)});
 
   final int maxDiscoveryTries;
   final Duration discoveryDelay;

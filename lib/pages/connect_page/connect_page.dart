@@ -1,15 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:web_os/web_os_client_api/web_os_network_api.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
 import 'package:web_os_control/controllers/tv_state.dart';
 import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_network_controller.dart';
-import 'package:web_os_control/pages/connect_page/error_message.dart';
-import 'package:web_os_control/pages/connect_page/tv_list_view.dart';
-import 'package:web_os_control/pages/connect_page/warning_message.dart';
+import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_system_controller.dart';
+import 'components/error_message.dart';
+import 'components/tv_list_view.dart';
+import 'components/turn_on_tv_button.dart';
+import 'components/warning_message.dart';
+import 'components/connect_page_title.dart';
+
 import 'package:web_os_control/web_os_control_routers.dart' as routers;
 import 'package:web_os_control/controllers/controllers.dart' as controllers;
-import 'connect_page_title.dart';
-import 'tv_item.dart';
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({super.key});
@@ -19,7 +21,9 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  final _networkController = controllers.getController<WebOsNetworkController>();
+  final _networkController =
+      controllers.getController<WebOsNetworkController>();
+  final _systemController = controllers.getController<WebOsSystemController>();
   @override
   void initState() {
     super.initState();
@@ -94,13 +98,28 @@ class _ConnectPageState extends State<ConnectPage> {
     if (tv != null) {
       return Column(children: [
         const Text('Last TV'),
-        TvItemList(
-            connect: () {
-              final future = _networkController.turnOnTV(tv);
-              future.then(nextPage);
-              return future;
-            },
-            tvNetworkInfo: tv),
+        Card(
+          elevation: 15,
+          child: ListTile(
+            leading: const Icon(Icons.tv),
+            title: Text(tv.name, style: Theme.of(context).textTheme.bodyMedium),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'IPv4: ${tv.ip}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  'MAC: ${tv.mac}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              ],
+            ),
+            trailing:
+                TurnOnTVButton(onPress: () => _systemController.turnON(tv)),
+          ),
+        )
       ]);
     }
 
