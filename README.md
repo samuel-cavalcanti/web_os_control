@@ -5,9 +5,9 @@ Essa aplicação foi feita Utilizando Flutter-dart e Tokio-rust, suportando Linu
 minha biblioteca https://github.com/samuel-cavalcanti/lg-webos-client, ao mesmo tempo que verifico como seria desenvolver uma aplicação utilizando
 o framework Flutter com rust.
 
-
-https://github.com/samuel-cavalcanti/web_os_control/assets/24573157/2945fa84-597b-4cd8-8028-75aefed51a35
-
+<p align="center">
+  <img  src="/docs/assets/remote%20control%20page.png">
+</p>
 
 
 ## Get Started
