@@ -43,14 +43,10 @@ pub async fn turn_on_task<T: TurnOnTV>(
         }
     };
 
-    let timer = std::time::SystemTime::now();
     if let Err(e) = turn_on_method.turn_on(&info).await {
         log::error!("Error on turn on TV, error: {e:?}");
         return false;
     }
-
-    let elapsed = timer.elapsed().unwrap();
-    log::debug!("TIMER TURN ON: {elapsed:?}");
 
     true
 }

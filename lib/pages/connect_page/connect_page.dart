@@ -33,6 +33,7 @@ class _ConnectPageState extends State<ConnectPage> {
   Widget build(BuildContext context) {
     final stream = _networkController.discovery().asBroadcastStream();
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -110,10 +111,10 @@ class _ConnectPageState extends State<ConnectPage> {
                   'IPv4: ${tv.ip}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                Text(
-                  'MAC: ${tv.mac}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                )
+                //Text(
+                //  'MAC: ${tv.mac}',
+                //  style: Theme.of(context).textTheme.bodySmall,
+                //)
               ],
             ),
             trailing:
@@ -132,13 +133,25 @@ class _ConnectPageState extends State<ConnectPage> {
 
   Widget buildTVList(BuildContext context,
       AsyncSnapshot<(List<WebOsTV>, DiscoveryState)> snapshot) {
-    const warningMsg =
-        WarningMessage(msg: 'Are you connected to the same Wifi as your TV ?');
     if (snapshot.hasData) {
       debugPrint('Update view, ${snapshot.data}');
-      final (tvs, _) = snapshot.data!;
+      final (tvs, state) = snapshot.data!;
       if (tvs.isEmpty) {
-        return warningMsg;
+        if (state == DiscoveryState.searching) {
+          return const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: WarningMessage(
+                msg: 'Are you connected to the same Wifi as your TV ?'),
+          );
+        } else {
+          return Center(
+            child: ElevatedButton.icon(
+              label: const Text('Search'),
+              icon: const Icon(Icons.search),
+              onPressed: _refresh,
+            ),
+          );
+        }
       } else {
         return TVListView(
             tvs: tvs,
@@ -149,9 +162,9 @@ class _ConnectPageState extends State<ConnectPage> {
             });
       }
     } else if (snapshot.hasError) {
-      return ErrorMessage(msg: "${snapshot.error}");
+      return Card(elevation: 2, child: ErrorMessage(msg: "${snapshot.error}"));
     } else {
-      return warningMsg;
+      return Container();
     }
   }
 

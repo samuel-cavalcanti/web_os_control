@@ -7,26 +7,14 @@ class NetworkController implements WebOsNetworkController {
 
   NetworkController(
       {required this.networkAPI,
-      this.maxDiscoveryTries = 5,
       this.discoveryDelay = const Duration(seconds: 1, milliseconds: 500)});
 
-  final int maxDiscoveryTries;
   final Duration discoveryDelay;
-  bool _stopDiscovery = false;
 
   @override
   Stream<(List<WebOsTV>, DiscoveryState)> discovery() async* {
     yield ([], DiscoveryState.searching);
     var tvs = await networkAPI.discoveryTv();
-    _stopDiscovery = false;
-
-    for (int tries = 0;
-        tries < maxDiscoveryTries && _stopDiscovery == false;
-        tries++) {
-      tvs = await networkAPI.discoveryTv();
-      await Future.delayed(discoveryDelay);
-      yield (tvs, DiscoveryState.searching);
-    }
 
     yield (tvs, DiscoveryState.finished);
   }
@@ -35,8 +23,6 @@ class NetworkController implements WebOsNetworkController {
   Future<TvState> connect(WebOsTV tv) => _toTvState(networkAPI.connectToTV(tv));
 
   Future<TvState> _toTvState(Future<bool> webOsFuture) {
-    _stopDiscovery = true;
-
     return webOsFuture.toTVState();
   }
 

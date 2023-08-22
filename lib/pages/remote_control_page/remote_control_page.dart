@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:web_os/web_os_client_api/web_os_client_api.dart';
+import 'package:web_os_control/controllers/tv_state.dart';
 import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_button_controller.dart';
 import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_channel_controller.dart';
 import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_pointer_controller.dart';
@@ -14,114 +17,174 @@ import 'channel/channel_widgets.dart' as channel_widgets;
 
 import 'scrollbar/scroll_bar.dart';
 
-import 'volume/volume_widgets.dart' as volume_widgets;
+import 'volume/volume_widgets.dart';
 
-import 'midia_player_buttons/midia_player_buttons_widgets.dart'
-    as midia_player_buttons;
-import 'webos_app_buttons/webos_app_buttons.dart' as webos_app_buttons;
+import 'midia_player_buttons/midia_player_buttons_widgets.dart';
+import 'webos_app_buttons/webos_app_buttons.dart';
 
-import 'power/power_button_widget.dart' as power_widget;
+import 'power/power_button_widget.dart';
 
-class RemoteControlPage extends StatelessWidget {
+class RemoteControlPage extends StatefulWidget {
   const RemoteControlPage({super.key});
+
+  @override
+  State<RemoteControlPage> createState() => _RemoteControlPageState();
+}
+
+class _RemoteControlPageState extends State<RemoteControlPage> {
+  void _backPage(Future<TvState> webOsFuture) {
+    webOsFuture.then((TvState state) {
+      if (state == TvState.disconect) {
+        Navigator.of(context).popAndPushNamed(routers.connectToTVPage);
+      }
+    });
+  }
+
+  void _motionOnTab(MotionKey key) {
+    final buttonController = controllers.getController<WebOsButtonController>();
+    final future = buttonController.pressMotionKey(key);
+    _backPage(future);
+  }
+
+  void _midiaPlayerOnPressed(MediaPlayerKey key) {
+    final controller = controllers.getController<WebOsButtonController>();
+    final future = controller.pressMediaPlayerKey(key);
+    _backPage(future);
+  }
+
+  void _webOsAppOnPressed(WebOsTvApp app) {
+    final controller = controllers.getController<WebOsButtonController>();
+    final future = controller.pressWebOsApp(app);
+
+    _backPage(future);
+  }
+
+  void _volumeOnPressed(Volume volume) {
+    final volumeController = controllers.getController<WebOsVolumeController>();
+    final future = volumeController.setVolume(volume);
+
+    _backPage(future);
+  }
+
+  void _setMute(bool mute) {
+    final volumeController = controllers.getController<WebOsVolumeController>();
+    final future = volumeController.setMute(mute);
+
+    _backPage(future);
+  }
+
+  void _powerButtonPressed(bool power) {
+    final systemController = controllers.getController<WebOsSystemController>();
+    final future = systemController.turnOff();
+
+    _backPage(future);
+  }
+
+  void _pressedChannel(ChannelKey key) {
+    final channelController =
+        controllers.getController<WebOsChannelController>();
+
+    final future = channelController.pressedChannel(key);
+
+    _backPage(future);
+  }
+
+  void _onMoveY(double dy) {
+    final pointerControoler =
+        controllers.getController<WebOsPointerController>();
+    final future = pointerControoler.scroll(dy);
+
+    _backPage(future);
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final buttonController = controllers.getController<WebOsButtonController>();
     const flex = 5;
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     debugPrint(
         "Size of screen: $size My phone size (360.0, 592.0)"); // My phone size (360.0, 592.0)
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Spacer(
-                flex: 2,
-              ),
-              Expanded(
-                flex: flex,
-                child: volumeChannelPowerScrollButtons(context),
-              ),
-              const Spacer(),
-              Expanded(
-                flex: flex,
-                child: MotionControlButtons(
-                  onTab: buttonController.pressMotionKey,
-                ),
-              ),
-              Expanded(
-                flex: flex,
-                child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      midia_player_buttons.MediaPlayerButtons(
-                          onPressed: buttonController.pressMediaPlayerKey),
-                      webos_app_buttons
-                          .appButtonsList(buttonController.pressWebOsApp)
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-Widget volumeChannelPowerScrollButtons(BuildContext context) {
-  const flexButtons = 4;
-  const flexSpace = 4;
-
-  final volumeController = controllers.getController<WebOsVolumeController>();
-  final systemController = controllers.getController<WebOsSystemController>();
-  final channelController = controllers.getController<WebOsChannelController>();
-  final pointerControoler = controllers.getController<WebOsPointerController>();
-  return Row(
-    children: [
-      const Spacer(),
-      Expanded(
-        flex: flexButtons,
-        child: volume_widgets.VolumeButton(
-          volumeOnPressed: volumeController.setVolume,
-        ),
-      ),
-      const Spacer(
-        flex: flexSpace - 2,
-      ),
-      Expanded(
-        flex: flexButtons,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            power_widget.PowerButton(onPressed: (bool power) {
-              systemController.turnOff();
-              Navigator.of(context).popAndPushNamed(routers.connectToTVPage);
-            }),
-            volume_widgets.VolumeMute(
-              setMute: volumeController.setMute,
+            const Spacer(
+              flex: 1,
+            ),
+            Expanded(
+              flex: flex,
+              child: volumeChannelPowerScrollButtons(context),
+            ),
+            const Spacer(),
+            Expanded(
+              flex: flex,
+              child: MotionControlButtons(
+                onTab: _motionOnTab,
+              ),
+            ),
+            Expanded(
+              flex: flex,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MediaPlayerButtons(
+                    onPressed: _midiaPlayerOnPressed,
+                  ),
+                  WebOsAppsButtonListView(onPressed: _webOsAppOnPressed)
+                ],
+              ),
             ),
           ],
         ),
       ),
-      const Spacer(
-        flex: flexSpace - 2,
-      ),
-      Expanded(
-        flex: flexButtons,
-        child: channel_widgets.ChannelButton(
-          onPressed: channelController.pressedChannel,
+    );
+  }
+
+  Widget volumeChannelPowerScrollButtons(BuildContext context) {
+    const flexButtons = 4;
+    const flexSpace = 4;
+
+    return Row(
+      children: [
+        const Spacer(),
+        Expanded(
+          flex: flexButtons,
+          child: VolumeButton(
+            volumeOnPressed: _volumeOnPressed,
+          ),
         ),
-      ),
-      Expanded(
-        flex: flexSpace + 2,
-        child: ScrollBar(onMoveY: pointerControoler.scroll),
-      ),
-    ],
-  );
+        const Spacer(
+          flex: flexSpace - 2,
+        ),
+        Expanded(
+          flex: flexButtons,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PowerButton(onPressed: _powerButtonPressed),
+              VolumeMuteButton(setMute: _setMute),
+            ],
+          ),
+        ),
+        const Spacer(
+          flex: flexSpace - 2,
+        ),
+        Expanded(
+          flex: flexButtons,
+          child: channel_widgets.ChannelButton(
+            onPressed: _pressedChannel,
+          ),
+        ),
+        Expanded(
+          flex: flexSpace + 2,
+          child: ScrollBar(onMoveY: _onMoveY),
+        ),
+      ],
+    );
+  }
 }

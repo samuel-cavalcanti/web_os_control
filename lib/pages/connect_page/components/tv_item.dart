@@ -44,10 +44,10 @@ class TvItemListState extends State<TvItemList> {
                 'IPv4: ${widget.tvNetworkInfo.ip}',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              Text(
-                'MAC: ${widget.tvNetworkInfo.mac}',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
+              //Text(
+              //  'MAC: ${widget.tvNetworkInfo.mac}',
+              //  style: Theme.of(context).textTheme.bodySmall,
+              //)
             ],
           ),
           trailing: tvStatus(context),

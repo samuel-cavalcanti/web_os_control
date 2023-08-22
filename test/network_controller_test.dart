@@ -38,12 +38,6 @@ void main() {
     final expects = [
       (<WebOsTV>[], DiscoveryState.searching),
       // 5 tries
-      (tvs, DiscoveryState.searching),
-      (tvs, DiscoveryState.searching),
-      (tvs, DiscoveryState.searching),
-      (tvs, DiscoveryState.searching),
-      (tvs, DiscoveryState.searching),
-
       (tvs, DiscoveryState.finished),
     ];
 
@@ -73,7 +67,6 @@ void main() {
 
     expect(await tv, null);
   });
-
 
   test('Test connect TV', () async {
     final mock = MockWebOsNetworkAPI();

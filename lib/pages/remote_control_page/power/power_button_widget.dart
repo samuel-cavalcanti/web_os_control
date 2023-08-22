@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:vector_math/vector_math_64.dart' as math;
-
-Widget powerButton(void Function() onPressed) {
-  return IconButton(
-    onPressed: onPressed,
-    icon: const Icon(
-      Icons.power_settings_new,
-      size: 50,
-    ),
-  );
-}
 
 class PowerButton extends StatefulWidget {
   final Function(bool power) onPressed;

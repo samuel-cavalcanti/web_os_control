@@ -8,6 +8,7 @@ class WebOsRemoteControlApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const m3 = true;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: web_os_control_routers.routers,
       initialRoute: web_os_control_routers.connectToTVPage,
       themeMode: ThemeMode.dark,

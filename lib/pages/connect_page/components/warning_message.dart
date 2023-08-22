@@ -6,12 +6,16 @@ class WarningMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          subtitle: Text(msg),
-          isThreeLine: true,
-        )
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            msg,
+            maxLines: 3,
+          ),
+        ),
       ],
     );
   }

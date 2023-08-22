@@ -7,7 +7,5 @@ const String connectToTVPage = "/connect_to_tv_page";
 
 Map<String, Widget Function(BuildContext)> routers = {
   remoteControlPage: (context) => const RemoteControlPage(),
-  connectToTVPage: (context) =>
-      const ConnectPage(),
+  connectToTVPage: (context) => const ConnectPage(),
 };
-

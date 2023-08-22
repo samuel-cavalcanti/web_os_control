@@ -3,18 +3,18 @@ import 'package:web_os_control/controllers/web_os_controllers_interface/web_os_v
 import '../rounded_container.dart';
 
 
-class VolumeMute extends StatefulWidget {
-  const VolumeMute({
+class VolumeMuteButton extends StatefulWidget {
+  const VolumeMuteButton({
     super.key,
     required this.setMute,
   });
 
   final void Function(bool) setMute;
   @override
-  State<StatefulWidget> createState() => _VolumeMuteState();
+  State<StatefulWidget> createState() => _VolumeMuteButtonState();
 }
 
-class _VolumeMuteState extends State<VolumeMute> {
+class _VolumeMuteButtonState extends State<VolumeMuteButton> {
   bool _mute = false;
   final notMutedIcon = const Icon(
     Icons.volume_mute,
