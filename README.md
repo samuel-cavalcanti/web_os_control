@@ -1,4 +1,4 @@
-# WEB OS Remote Controller
+# WEB OS Remote Control
 
 Controle remoto para TVs que utilizam o sistema [WebOS](https://webostv.developer.lge.com/).
 Essa aplicação foi feita Utilizando Flutter-dart e Tokio-rust, suportando Linux e Android. Basicamente essa aplicação é uma interface gráfica para
