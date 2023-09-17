@@ -90,8 +90,13 @@ pub async fn try_to_connect<Client: ClientState>(
     //let try_to_connect = try_to_connect_to_tv(&mut *client_state, config).await;
     load_key_from_file(&mut config).await;
 
+    let timeout = if config.key.is_some() {
+        TIMEOUT
+    } else {
+        Duration::from_secs(30)
+    };
     log::debug!("Connecting to  TV");
-    let timeout = tokio::time::timeout(TIMEOUT, client_state.connect(config)).await;
+    let timeout = tokio::time::timeout(timeout, client_state.connect(config)).await;
 
     let connect = match timeout {
         Ok(c) => c,
@@ -189,7 +194,6 @@ pub async fn send_pointer_command<Cmd: PointerInputCommand + 'static, Client: Cl
 
     result.is_ok()
 }
-
 
 #[cfg(test)]
 mod tests {
