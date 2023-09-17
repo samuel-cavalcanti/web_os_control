@@ -93,7 +93,7 @@ pub async fn try_to_connect<Client: ClientState>(
     let timeout = if config.key.is_some() {
         TIMEOUT
     } else {
-        Duration::from_secs(30)
+        FIRST_CONNECT_TIMEOUT
     };
     log::debug!("Connecting to  TV");
     let timeout = tokio::time::timeout(timeout, client_state.connect(config)).await;
@@ -150,8 +150,14 @@ async fn load_key_from_file(config: &mut WebOsClientConfig) {
 #[cfg(test)]
 const TIMEOUT: Duration = Duration::from_nanos(1);
 
+#[cfg(test)]
+const FIRST_CONNECT_TIMEOUT: Duration = Duration::from_nanos(1);
+
 #[cfg(not(test))]
 const TIMEOUT: Duration = Duration::from_millis(500);
+
+#[cfg(not(test))]
+const FIRST_CONNECT_TIMEOUT: Duration = Duration::from_secs(5);
 
 pub async fn send_lg_command<Cmd: LGCommandRequest + 'static, Client: ClientState>(
     client: Arc<Mutex<Client>>,
