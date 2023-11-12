@@ -34,12 +34,20 @@ Executando testes em dart-flutter
 flutter test
 ```
 
-Executando testes do código em rust
+Executando testes do código em rust na maquina host (linux)
 
 ```bash
 cd ./web_os
 cargo t
 ```
+
+é possível executar os testes unitários no android, utilizando o [dinghy](https://github.com/sonos/dinghy). Será necessário conectar o dispositivo com adb veja em [Comandos úteis](#comandos-úteis).
+
+```bash
+# no caso estou utilizando  wireless debug, ao invés de um cabo do tipo USB
+cargo dinghy -d <device ip>:<port> test
+```
+
 
 ## Executando aplicativo localmente
 
