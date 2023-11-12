@@ -157,7 +157,7 @@ const FIRST_CONNECT_TIMEOUT: Duration = Duration::from_nanos(1);
 const TIMEOUT: Duration = Duration::from_millis(500);
 
 #[cfg(not(test))]
-const FIRST_CONNECT_TIMEOUT: Duration = Duration::from_secs(5);
+const FIRST_CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
 
 pub async fn send_lg_command<Cmd: LGCommandRequest + 'static, Client: ClientState>(
     client: Arc<Mutex<Client>>,
