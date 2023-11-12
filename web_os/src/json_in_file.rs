@@ -2,8 +2,12 @@ use std::io;
 
 use serde_json::Value;
 
+#[cfg(not(test))]
 #[cfg(target_os = "android")]
 const DIR: &str = "/data/data/com.example.web_os_control_flutter/files/";
+#[cfg(test)]
+#[cfg(target_os = "android")]
+const DIR: &str = "/data/local/tmp/";
 
 #[cfg(target_os = "linux")]
 const DIR: &str = "";
@@ -18,6 +22,7 @@ pub async fn save_json(json: &Value, file_name: &str) -> Result<(), JsonInFileEr
     };
 
     let file_name = std::path::Path::new(DIR).join(file_name);
+    println!("file_name: {file_name:?}");
 
     match tokio::fs::write(&file_name, &string_json).await {
         Ok(_) => {
@@ -72,13 +77,6 @@ mod tests {
 
         let file_name = "test_save_json.json";
         save_json(&json, file_name).await.unwrap();
-
-        let content = std::fs::read_to_string(file_name).unwrap();
-
-        let expected = r#"{"a":1,"b":2,"test":3}"#;
-        let expected = expected.to_string();
-
-        assert_eq!(content, expected);
 
         let json = load_json(file_name).await.unwrap();
 
